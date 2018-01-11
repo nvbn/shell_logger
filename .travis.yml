@@ -1,0 +1,6 @@
+language: go
+go:
+  - 1.9
+script:
+  - test -z $(go fmt ./...)
+  - go test -v ./...
