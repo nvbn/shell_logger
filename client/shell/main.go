@@ -33,6 +33,8 @@ func Get() (Shell, error) {
 	switch shellName {
 	case "zsh":
 		return &zsh{}, nil
+	case "fish":
+		return &fish{}, nil
 	default:
 		return nil, errors.New("Shell is not supported")
 	}

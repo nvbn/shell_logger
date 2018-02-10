@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/nvbn/shell_logger/client/shell"
 	"os"
+
+	"github.com/nvbn/shell_logger/client/shell"
 )
 
 func configure() {
