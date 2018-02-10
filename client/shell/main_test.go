@@ -22,6 +22,22 @@ func TestGetZsh(t *testing.T) {
 	}
 }
 
+func TestGetFish(t *testing.T) {
+	os.Setenv("SHELL", "fish")
+
+	sh, err := Get()
+	if err != nil {
+		t.Fatalf("Unexpected error %s", err)
+	}
+
+	result := reflect.TypeOf(sh).String()
+	expected := "*shell.fish"
+
+	if result != expected {
+		t.Fatalf("Expected %s but got %s", expected, result)
+	}
+}
+
 func TestGetUnsupportedShell(t *testing.T) {
 	os.Setenv("SHELL", "-")
 
