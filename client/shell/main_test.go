@@ -58,7 +58,7 @@ func TestInWrapper(t *testing.T) {
 	expected := true
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %t but got %t", expected, result)
 	}
 }
 
@@ -69,7 +69,7 @@ func TestInWrapperFalse(t *testing.T) {
 	expected := false
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %t but got %t", expected, result)
 	}
 }
 

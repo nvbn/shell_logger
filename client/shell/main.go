@@ -18,6 +18,8 @@ const FailedCommandEnv = "__SHELL_LOGGER_FAILED_COMMAND"
 
 const StartTimeEnv = "__SHELL_LOGGER_START_TIME"
 
+const FuckCommand = "__SHELL_LOGGER_FUCK_CMD"
+
 type Shell interface {
 	// Returns shell specific code for starting our wrapper
 	SetupWrapper(clientPath string) string

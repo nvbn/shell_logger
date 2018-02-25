@@ -13,14 +13,15 @@ func (z *zsh) SetupWrapper(clientPath string) string {
 }
 
 var zshHooksTmpl = `
+preexec () {
+	{{.StartTimeEnv}}=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+}
 precmd() {
-    export __SHELL_LOGGER_RETURN_CODE=$?
-    export __SHELL_LOGGER_SOCKET=<socket>
-    export __SHELL_LOGGER_COMMAND=$(fc -ln -1)
-    export __SHELL_LOGGER_FAILED_COMMAND=$(fc -ln -3 | head -n 1)
-    export __SHELL_LOGGER_CLIENT_PATH=$GOPATH/src/github.com/nvbn/shell_logger/client
-    export __SHELL_LOGGER_FUCK_CMD=$(fc -ln -2 | head -n 1)
-    [ "$__SHELL_LOGGER_FUCK_CMD" == "fuck" ] && $__SHELL_LOGGER_CLIENT_PATH/client -mode=submit
+	export {{.ReturnCodeEnv}}=$?
+	export {{.CommandEnv}}=$(fc -ln -1)
+	export {{.FailedCommandEnv}}=$(fc -ln -3 | head -n 1)
+	export {{.FuckCommand}}=$(fc -ln -2 | head -n 1)
+	[ "${{.FuckCommand}}" == "fuck" ] && {{.BinaryPath}} -mode submit
 }
 `
 

@@ -6,6 +6,7 @@ import (
 	"os"
     // "log"
 	"github.com/nvbn/shell_logger/client/shell"
+	"log"
 )
 
 func configure() {
@@ -32,7 +33,7 @@ func main() {
 		configure()
 	case "daemon":
 		shell.SetUpUnixSocket()
-		// TODO setup DB first time
+		shell.SetupDatabase()
 	case "wrapper":
 		fmt.Println("wrapper")
 	case "submit":
@@ -40,12 +41,11 @@ func main() {
         var failedCommand string = os.Getenv(shell.FailedCommandEnv)
         fmt.Println("successful command: " + successfulCommand)
         fmt.Println("failed command: " + failedCommand)
-/*
-        err := Insert([]byte(successfulCommand), []byte(failedCommand))
+
+        err := shell.Insert([]byte(successfulCommand), []byte(failedCommand))
         if err != nil {
             log.Fatal(err)
         }
-*/
 	default:
 		flag.Usage()
 		os.Exit(2)
