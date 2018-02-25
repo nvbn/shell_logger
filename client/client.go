@@ -23,14 +23,29 @@ func configure() {
 	fmt.Println(sh.SetupHooks(clientPath))
 }
 
+func inspect(key *string) {
+	fmt.Printf("Inspecting `%s´:\n", *key)
+	shell.SetupDatabase()
+	goodCommands, err := shell.GetGoodCommands([]byte(*key))
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, goodCommand := range goodCommands {
+		fmt.Println(string(goodCommand))
+	}
+}
+
 func main() {
 	mode := flag.String("mode", "", "configure|daemon|wrapper|submit")
+	key := flag.String("key", "", "key to inspect")
 
 	flag.Parse()
 
 	switch *mode {
 	case "configure":
 		configure()
+	case "inspect":
+		inspect(key)
 	case "daemon":
 		shell.SetupDatabase()
 		shell.SetUpUnixSocket()
