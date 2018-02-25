@@ -82,3 +82,23 @@ func TestSetUpUnixSocket(t *testing.T) {
 		t.Fatalf("Expected nil but got %s", result)
 	}
 }
+
+func TestGetFailedCommand(t *testing.T) {
+    expected := "Failed Command"
+    os.Setenv(FailedCommandEnv, expected)
+    result := os.Getenv(FailedCommandEnv)
+
+    if result != expected {
+		t.Fatalf("Expected %s but got %s", expected, result)
+    }
+}
+
+func TestGetSuccessfulCommand(t *testing.T) {
+    expected := "Successful Command"
+    os.Setenv(CommandEnv, expected)
+    result := os.Getenv(CommandEnv)
+
+    if result != expected {
+		t.Fatalf("Expected %s but got %s", expected, result)
+    }
+}

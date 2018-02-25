@@ -14,6 +14,8 @@ const SocketEnv = "__SHELL_LOGGER_SOCKET"
 
 const CommandEnv = "__SHELL_LOGGER_COMMAND"
 
+const FailedCommandEnv = "__SHELL_LOGGER_FAILED_COMMAND"
+
 const StartTimeEnv = "__SHELL_LOGGER_START_TIME"
 
 type Shell interface {
@@ -95,4 +97,12 @@ func Get() (Shell, error) {
 // Returns true when client runs inside the wrapper
 func InWrapper() bool {
 	return os.Getenv(SocketEnv) != ""
+}
+
+func GetFailedCommand() string {
+    return os.Getenv(FailedCommandEnv)
+}
+
+func GetSuccessfulCommand() string {
+    return os.Getenv(CommandEnv)
 }
