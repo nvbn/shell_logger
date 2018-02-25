@@ -72,3 +72,13 @@ func TestInWrapperFalse(t *testing.T) {
 		t.Fatalf("Expected %s but got %s", expected, result)
 	}
 }
+
+func TestSetUpUnixSocket(t *testing.T) {
+	// Test that no environment variable throws an error
+	os.Setenv(SocketEnv, "")
+
+	result := SetUpUnixSocket()
+	if result == nil {
+		t.Fatalf("Expected nil but got %s", result)
+	}
+}

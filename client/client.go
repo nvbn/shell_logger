@@ -19,21 +19,20 @@ func configure() {
 		panic(err)
 	}
 
-	if shell.InWrapper() {
-		fmt.Println(sh.SetupHooks(clientPath))
-	} else {
-		fmt.Println(sh.SetupWrapper(clientPath))
-	}
+	fmt.Println(sh.SetupHooks(clientPath))
 }
 
 func main() {
-	mode := flag.String("mode", "", "configure|wrapper|submit")
+	mode := flag.String("mode", "", "configure|daemon|wrapper|submit")
 
 	flag.Parse()
 
 	switch *mode {
 	case "configure":
 		configure()
+	case "daemon":
+		shell.SetUpUnixSocket()
+		// TODO setup DB first time
 	case "wrapper":
 		fmt.Println("wrapper")
 	case "submit":
@@ -42,5 +41,4 @@ func main() {
 		flag.Usage()
 		os.Exit(2)
 	}
-
 }
