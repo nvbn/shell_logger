@@ -20,12 +20,11 @@ func configure() {
 		panic(err)
 	}
 
-	fmt.Println(sh.SetupHooks(clientPath))
+	fmt.Println(sh.SetupHooks(clientPath, shell.DBPath))
 }
 
 func inspect(key *string) {
-	fmt.Printf("Inspecting `%s´:\n", *key)
-	shell.SetupDatabase()
+	shell.SetupDatabase(shell.DBPath)
 	goodCommands, err := shell.GetGoodCommands([]byte(*key))
 	if err != nil {
 		log.Fatal(err)
@@ -41,13 +40,18 @@ func main() {
 
 	flag.Parse()
 
+	shell.DBPath = shell.GetDBPath()
+	if shell.DBPath == "" {
+		log.Fatal("Database path should be specified")
+	}
+
 	switch *mode {
 	case "configure":
 		configure()
 	case "inspect":
 		inspect(key)
 	case "daemon":
-		shell.SetupDatabase()
+		shell.SetupDatabase(shell.DBPath)
 		shell.SetUpUnixSocket()
 	case "wrapper":
 		fmt.Println("wrapper")

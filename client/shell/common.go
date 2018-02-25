@@ -12,9 +12,11 @@ type hooksOptions struct {
 	FailedCommandEnv string
 	FuckCommand   string
 	BinaryPath	  string
+	DatabasePathEnv string
+	DatabasePath string
 }
 
-func renderHooks(tmpl *template.Template, clientPath string) string {
+func renderHooks(tmpl *template.Template, clientPath string, dbPath string) string {
 	hookOptions := hooksOptions{
 		BinaryPath:    clientPath,
 		ReturnCodeEnv:    ReturnCodeEnv,
@@ -22,6 +24,8 @@ func renderHooks(tmpl *template.Template, clientPath string) string {
 		CommandEnv:    CommandEnv,
 		StartTimeEnv:  StartTimeEnv,
 		FuckCommand:   FuckCommand,
+		DatabasePathEnv: DBPathEnv,
+		DatabasePath: dbPath,
 	}
 
 	var hook bytes.Buffer

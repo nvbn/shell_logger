@@ -21,11 +21,10 @@ function __shell_logger_preexec -e fish_preexec
 end
 `
 
-func (f *fish) SetupHooks(clientPath string) string {
+func (f *fish) SetupHooks(clientPath string, dbPath string) string {
 	tmpl, err := template.New("fish-hook").Parse(fishHooksTmpl)
 	if err != nil {
 		panic(err)
 	}
-
-	return renderHooks(tmpl, clientPath)
+	return renderHooks(tmpl, clientPath, dbPath)
 }

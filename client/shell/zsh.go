@@ -14,22 +14,23 @@ func (z *zsh) SetupWrapper(clientPath string) string {
 
 var zshHooksTmpl = `
 preexec () {
-	{{.StartTimeEnv}}=$(date -u +"%Y-%m-%dT%H:%M:%SZ");
+	{{.StartTimeEnv}}=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 }
 precmd () {
-	export {{.ReturnCodeEnv}}=$?;
-	export {{.CommandEnv}}=$(fc -ln -1);
-	export {{.FailedCommandEnv}}=$(fc -ln -3 | head -n 1);
-	export {{.FuckCommand}}=$(fc -ln -2 | head -n 1);
-	[ "${{.FuckCommand}}" = "fuck" ] && {{.BinaryPath}} -mode submit;
+	export {{.ReturnCodeEnv}}=$?
+	export {{.CommandEnv}}=$(fc -ln -1)
+	export {{.FailedCommandEnv}}=$(fc -ln -3 | head -n 1)
+	export {{.FuckCommand}}=$(fc -ln -2 | head -n 1)
+	export {{.DatabasePathEnv}}={{.DatabasePath}}
+	[ "${{.FuckCommand}}" = "fuck" ] && [ "${{.ReturnCodeEnv}}" = "0" ] && {{.BinaryPath}} -mode submit
 }
 `
 
-func (z *zsh) SetupHooks(clientPath string) string {
+func (z *zsh) SetupHooks(clientPath string, dbPath string) string {
 	tmpl, err := template.New("zsh-hook").Parse(zshHooksTmpl)
 	if err != nil {
 		panic(err)
 	}
 
-	return renderHooks(tmpl, clientPath)
+	return renderHooks(tmpl, clientPath, dbPath)
 }

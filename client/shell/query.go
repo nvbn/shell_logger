@@ -2,13 +2,12 @@ package shell
 
 import (
 	"sort"
-	"fmt"
 	"unicode"
 )
 
 // Get the first command from an shell input
 func GetFirstCommand(str []byte) []byte {
-	if len(str) > 0 && unicode.IsSpace(int32(str[0])) {
+	if len(str) == 0 || unicode.IsSpace(int32(str[0])) {
 		return nil
 	}
 	for i := 0; i < len(str); i++ {
@@ -51,7 +50,6 @@ func GetTopThreeCommands(firstCommand []byte) ([][]byte, error) {
 	if err != nil {
 		return [][]byte{}, err
 	}
-	fmt.Printf("GOOD COMMAND %v", len(goodCommands))
 	if goodCommands == nil || len(goodCommands) == 0 {
 		return [][]byte{}, nil
 	}

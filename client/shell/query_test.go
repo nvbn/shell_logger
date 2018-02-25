@@ -2,24 +2,30 @@ package shell
 
 import "testing"
 
-func TestGetFirstCommand(t *testing.T) {
-	var commands [4][]byte
+func testGetFirstCommand(t *testing.T) {
+	var commands [6][]byte
 	commands[0] = []byte("ls")
 	commands[1] = []byte("ls ")
 	commands[2] = []byte("ls  -a")
 	commands[3] = []byte("ls -la ")
+	commands[4] = []byte("")
+	commands[5] = []byte(" ls")
 	expected := []byte("ls")
-	for _, command := range commands {
+	for _, command := range commands[:4] {
 		result := GetFirstCommand(command)
 		if string(result) != string(expected) {
 			t.Fatalf("Expected %s, but got %s", expected, result)
 		}
 	}
+	for _, command := range commands[4:6] {
+		result := GetFirstCommand(command)
+		if result != nil {
+			t.Fatalf("Expected nil, but got %s", result)
+		}
+	}
 }
 
-func TestGetTopThreeCommands(t *testing.T) {
-	DBLocation = "test.db"
-
+func testGetTopThreeCommands(t *testing.T) {
 	goodCommands := [][]byte{	[]byte("git push origin master"),
 								[]byte("git push origin master"),
 								[]byte("git push origin master"),
@@ -51,7 +57,7 @@ func TestGetTopThreeCommands(t *testing.T) {
 	ClearData()
 }
 
-func TestGetLessThanThreeCommands(t *testing.T) {
+func testGetLessThanThreeCommands(t *testing.T) {
 	goodCommands := [][]byte{	[]byte("git push origin master"),
 								[]byte("git push origin master"),
 								[]byte("git push origin master"),
@@ -74,9 +80,18 @@ func TestGetLessThanThreeCommands(t *testing.T) {
 	ClearData()
 }
 
-func TestNoCommands(t *testing.T) {
+func testNoCommands(t *testing.T) {
 	topCommands, err := GetTopThreeCommands([]byte{})
 	if err != nil {
 		t.Fatalf("Expected %d commands, but got %d", 0, len(topCommands))
 	}
+}
+
+func TestQuery(t *testing.T) {
+	SetupDatabase("test.db")
+
+	t.Run("TestNoCommands", testNoCommands)
+	t.Run("TestGetLessThanThreeCommands", testGetLessThanThreeCommands)
+	t.Run("TestGetTopThreeCommands", testGetTopThreeCommands)
+	t.Run("TestGetFirstCommand", testGetFirstCommand)
 }

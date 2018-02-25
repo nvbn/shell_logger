@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"net"
 	"log"
-	"fmt"
 )
 
 const ReturnCodeEnv = "__SHELL_LOGGER_RETURN_CODE"
@@ -21,18 +20,22 @@ const StartTimeEnv = "__SHELL_LOGGER_START_TIME"
 
 const FuckCommand = "__SHELL_LOGGER_FUCK_CMD"
 
+const DBPathEnv = "__SHELL_LOGGER_DB_PATH"
+
+
+var DBPath string
+
 type Shell interface {
 	// Returns shell specific code for starting our wrapper
 	SetupWrapper(clientPath string) string
 	// Returns shell specific code for pre/post command hooks
-	SetupHooks(clientPath string) string
+	SetupHooks(clientPath string, dbPath string) string
 }
 
 func handleSocketConnection(c net.Conn) {
 	for {
 		buf := make([]byte, 512)
 		nr, err := c.Read(buf)
-		fmt.Println("read from socket ", nr, err)
 		if err != nil {
 			return
 		}
@@ -44,16 +47,15 @@ func handleSocketConnection(c net.Conn) {
 			return
 		}
 		recommendedCommands, err := GetTopThreeCommands(firstCommand)
-		fmt.Println("Returned GetTopThreeComands")
 		if err != nil {
 			c.Write([]byte{0})
 			return
 		}
+
 		// Write the length of the command, and the command itself
-		fmt.Println("Write length ", len(recommendedCommands))
 		c.Write([]byte{byte(len(recommendedCommands))})
 		for i := 0; i < len(recommendedCommands); i++ {
-			_, err = c.Write(make([]byte, len(recommendedCommands[i])))
+			_, err = c.Write([]byte{byte(len(recommendedCommands[i]))})
 			c.Write(recommendedCommands[i])
 		}
 		if err != nil {
@@ -87,7 +89,6 @@ func SetUpUnixSocket () (error) {
 		if err != nil {
 			log.Fatal("accept error:", err)
 		}
-		fmt.Println("Socket is running ", unixConn)
 		go handleSocketConnection(unixConn)
 	}
 	defer unixLn.Close()
@@ -124,4 +125,8 @@ func GetFailedCommand() string {
 
 func GetSuccessfulCommand() string {
     return os.Getenv(CommandEnv)
+}
+
+func GetDBPath() string {
+	return os.Getenv(DBPathEnv)
 }

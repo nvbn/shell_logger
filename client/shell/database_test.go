@@ -19,10 +19,7 @@ func ClearData() error{
 	return err
 }
 
-func TestPutGet(t *testing.T){
-	DBLocation = "test.db"
-	SetupDatabase()
-
+func testPutGet(t *testing.T) {
 	corr := []byte("git push origin master")
 	incorr := []byte("git push origin mast")
 	incorr2 := []byte("git pus origin master")
@@ -45,6 +42,12 @@ func TestPutGet(t *testing.T){
 	assert.Equal(t, newCorr, command1[2])
 	assert.Equal(t, 1, len(command2))
 	assert.Equal(t, secondCorr, command2[0])
+}
+
+func TestDB(t *testing.T){
+	SetupDatabase("test.db")
+
+	t.Run("TestPutGet", testPutGet)
 
 	ClearData()
 }
