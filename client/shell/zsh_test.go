@@ -21,12 +21,12 @@ func TestZsh_SetupHooks(t *testing.T) {
 preexec () {
 	__SHELL_LOGGER_START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 }
-precmd() {
+precmd () {
 	export __SHELL_LOGGER_RETURN_CODE=$?
 	export __SHELL_LOGGER_COMMAND=$(fc -ln -1)
 	export __SHELL_LOGGER_FAILED_COMMAND=$(fc -ln -3 | head -n 1)
 	export __SHELL_LOGGER_FUCK_CMD=$(fc -ln -2 | head -n 1)
-	[ "$__SHELL_LOGGER_FUCK_CMD" == "fuck" ] && shell_logger -mode submit
+	[ "$__SHELL_LOGGER_FUCK_CMD" = "fuck" ] && shell_logger -mode submit
 }
 `
 	if result != expected {

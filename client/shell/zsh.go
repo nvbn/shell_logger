@@ -14,14 +14,14 @@ func (z *zsh) SetupWrapper(clientPath string) string {
 
 var zshHooksTmpl = `
 preexec () {
-	{{.StartTimeEnv}}=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+	{{.StartTimeEnv}}=$(date -u +"%Y-%m-%dT%H:%M:%SZ");
 }
-precmd() {
-	export {{.ReturnCodeEnv}}=$?
-	export {{.CommandEnv}}=$(fc -ln -1)
-	export {{.FailedCommandEnv}}=$(fc -ln -3 | head -n 1)
-	export {{.FuckCommand}}=$(fc -ln -2 | head -n 1)
-	[ "${{.FuckCommand}}" == "fuck" ] && {{.BinaryPath}} -mode submit
+precmd () {
+	export {{.ReturnCodeEnv}}=$?;
+	export {{.CommandEnv}}=$(fc -ln -1);
+	export {{.FailedCommandEnv}}=$(fc -ln -3 | head -n 1);
+	export {{.FuckCommand}}=$(fc -ln -2 | head -n 1);
+	[ "${{.FuckCommand}}" = "fuck" ] && {{.BinaryPath}} -mode submit;
 }
 `
 

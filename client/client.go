@@ -32,15 +32,13 @@ func main() {
 	case "configure":
 		configure()
 	case "daemon":
-		shell.SetUpUnixSocket()
 		shell.SetupDatabase()
+		shell.SetUpUnixSocket()
 	case "wrapper":
 		fmt.Println("wrapper")
 	case "submit":
         var successfulCommand string = os.Getenv(shell.CommandEnv)
         var failedCommand string = os.Getenv(shell.FailedCommandEnv)
-        fmt.Println("successful command: " + successfulCommand)
-        fmt.Println("failed command: " + failedCommand)
 
         err := shell.Insert([]byte(successfulCommand), []byte(failedCommand))
         if err != nil {

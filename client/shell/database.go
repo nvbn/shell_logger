@@ -3,22 +3,20 @@ package shell
 import (
 	"fmt"
 	"encoding/json"
-
 	"github.com/boltdb/bolt"
+	"log"
 )
 
-var db *bolt.DB
+var DBLocation = "my.db"
 
 // Creates the database if it doesn't exist, otherwise opens the database and creates a bucket for key:value pairs
 func SetupDatabase() error {
-	pathToDatabase := "my.db"
-	var err error = nil
-	db, err = bolt.Open(pathToDatabase, 0600, nil)
-	if err != nil {
-		fmt.Printf("Failed to open database: %v", err)
-		return err
-	}
-	err = db.Update(func(tx *bolt.Tx) error {
+	db := openConn()
+	defer db.Close()
+
+	fmt.Println("Starting up database")
+	db.Update(func(tx *bolt.Tx) error {
+		tx.DeleteBucket([]byte("Mappings"))
 		_, err := tx.CreateBucketIfNotExists([]byte("Mappings"))
 		if err != nil {
 			fmt.Printf("Failed to create bucket: %v", err)
@@ -26,16 +24,34 @@ func SetupDatabase() error {
 		}
 		return nil
 	})
-	return err
+	return nil
 }
 
-func CloseDatabase() {
-	db.Close()
+func openConn() *bolt.DB {
+	db, err := bolt.Open(DBLocation, 0600, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return db
 }
 
 // Gets the JSON Object from the database
-func GetJsonValues(key []byte) ([]byte, error) {
+func GetJsonValues(db *bolt.DB, key []byte) ([]byte, error) {
 	var jsonValue []byte
+	fmt.Println("GetJsonValues")
+	if db == nil {
+		fmt.Errorf("DB is null")
+	}
+
+	db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists([]byte("Mappings"))
+		if err != nil {
+			fmt.Printf("Failed to create bucket: %v", err)
+			return err
+		}
+		return nil
+	})
+
 	err := db.View(func(tx *bolt.Tx) error {
 		jsonValue = tx.Bucket([]byte("Mappings")).Get(key)
 		return nil
@@ -46,10 +62,14 @@ func GetJsonValues(key []byte) ([]byte, error) {
 	return jsonValue, err
 }
 
-// Gets the list of bad commands from the database
+// Gets the list of good commands from the database
 func GetGoodCommands(key []byte) ([][]byte, error) {
+	db := openConn()
+	defer db.Close()
+
 	var vals [][]byte
-	jsonObject, err := GetJsonValues(key)
+	fmt.Println()
+	jsonObject, err := GetJsonValues(db, key)
 	if err != nil {
 		fmt.Printf("Failed to retrieve values: %v", err)
 		return nil, err
@@ -61,25 +81,22 @@ func GetGoodCommands(key []byte) ([][]byte, error) {
 	return vals, err
 }
 
-func GetFirstCommand(str []byte) []byte {
-	for i := 0; i < len(str); i++ {
-		if str[i] == ' ' {
-			return str[:i]
-		}
-	}
-	return str
-}
-
 // Inserts the key:value pair of correctCommand:incorrectCommand into the database
 func Insert(correct []byte, incorrect []byte) error {
+	fmt.Printf("Inserting %v into the database", correct)
 	firstWord := GetFirstCommand(correct)
+	fmt.Println("FIRST WORD ", firstWord)
 	correctCommands, err := GetGoodCommands(firstWord)
 	if err != nil {
 		return err
 	}
-	if correctCommands == nil { 
+	db := openConn()
+	defer db.Close()
+	if correctCommands == nil {
+		fmt.Println("Correct commands is nil")
 		err := db.Update(func(tx *bolt.Tx) error {
 			correctCommand := [1][]byte{correct}
+			fmt.Println("correct command: %v", correctCommand)
 			jsonObject, err := json.Marshal(correctCommand)
 			if err != nil {
 				fmt.Printf("Failed to marshal: %v", err)
@@ -94,11 +111,12 @@ func Insert(correct []byte, incorrect []byte) error {
 			})
 		return err
 	} else {
-		err := db.Update(func(tx *bolt.Tx) error {
-			jsonObject, err := GetJsonValues(firstWord)
-			if err != nil {
-				return err
-			}
+		fmt.Println("Correct commands is not nil")
+		jsonObject, err := GetJsonValues(db, firstWord)
+		if err != nil {
+			return err
+		}
+		err = db.Update(func(tx *bolt.Tx) error {
 			var vals [][]byte
 			err = json.Unmarshal(jsonObject, &vals)
 			if err != nil {
@@ -117,7 +135,7 @@ func Insert(correct []byte, incorrect []byte) error {
 				return err
 			}
 			return nil
-			})
+		})
 		return err
 	}
 	

@@ -17,7 +17,7 @@ function __shell_logger_preexec -e fish_preexec
     {{.StartTimeEnv}}=(date -u +"%Y-%m-%dT%H:%M:%SZ") \
     {{.ReturnCodeEnv}}=$status \
     {{.CommandEnv}}=$history[1] \
-    {{.ClientPath}} --mode=submit
+    shell_logger --mode=submit
 end
 `
 
