@@ -73,16 +73,6 @@ func TestInWrapperFalse(t *testing.T) {
 	}
 }
 
-func TestSetUpUnixSocket(t *testing.T) {
-	// Test that no environment variable throws an error
-	os.Setenv(SocketEnv, "")
-
-	result := SetUpUnixSocket()
-	if result == nil {
-		t.Fatalf("Expected nil but got %s", result)
-	}
-}
-
 func TestGetFailedCommand(t *testing.T) {
     expected := "Failed Command"
     os.Setenv(FailedCommandEnv, expected)
@@ -101,4 +91,14 @@ func TestGetSuccessfulCommand(t *testing.T) {
     if result != expected {
 		t.Fatalf("Expected %s but got %s", expected, result)
     }
+}
+
+func TestSetDBPath(t *testing.T) {
+	expected := "test"
+	os.Setenv(DBPathEnv, expected)
+	result := GetDBPath()
+
+	if result != expected {
+		t.Fatalf("Expected %s but got %s", expected, result)
+	}
 }

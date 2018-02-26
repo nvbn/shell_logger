@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-    // "log"
 	"github.com/nvbn/shell_logger/client/shell"
 	"log"
 )
@@ -52,7 +51,8 @@ func main() {
 		inspect(key)
 	case "daemon":
 		shell.SetupDatabase(shell.DBPath)
-		shell.SetUpUnixSocket()
+		done := make(chan os.Signal, 1)
+		shell.SetUpUnixSocket(done)
 	case "wrapper":
 		fmt.Println("wrapper")
 	case "submit":
