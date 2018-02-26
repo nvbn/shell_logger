@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 	"github.com/nvbn/shell_logger/client/shell"
 	"log"
+	"os"
 )
 
 func configure() {
@@ -56,13 +56,13 @@ func main() {
 	case "wrapper":
 		fmt.Println("wrapper")
 	case "submit":
-        var successfulCommand string = os.Getenv(shell.CommandEnv)
-        var failedCommand string = os.Getenv(shell.FailedCommandEnv)
+		var successfulCommand string = os.Getenv(shell.CommandEnv)
+		var failedCommand string = os.Getenv(shell.FailedCommandEnv)
 
-        err := shell.Insert([]byte(successfulCommand), []byte(failedCommand))
-        if err != nil {
-            log.Fatal(err)
-        }
+		err := shell.Insert([]byte(successfulCommand), []byte(failedCommand))
+		if err != nil {
+			log.Fatal(err)
+		}
 	default:
 		flag.Usage()
 		os.Exit(2)

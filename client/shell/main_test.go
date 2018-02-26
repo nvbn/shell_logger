@@ -74,23 +74,23 @@ func TestInWrapperFalse(t *testing.T) {
 }
 
 func TestGetFailedCommand(t *testing.T) {
-    expected := "Failed Command"
-    os.Setenv(FailedCommandEnv, expected)
-    result := os.Getenv(FailedCommandEnv)
+	expected := "Failed Command"
+	os.Setenv(FailedCommandEnv, expected)
+	result := os.Getenv(FailedCommandEnv)
 
-    if result != expected {
+	if result != expected {
 		t.Fatalf("Expected %s but got %s", expected, result)
-    }
+	}
 }
 
 func TestGetSuccessfulCommand(t *testing.T) {
-    expected := "Successful Command"
-    os.Setenv(CommandEnv, expected)
-    result := os.Getenv(CommandEnv)
+	expected := "Successful Command"
+	os.Setenv(CommandEnv, expected)
+	result := os.Getenv(CommandEnv)
 
-    if result != expected {
+	if result != expected {
 		t.Fatalf("Expected %s but got %s", expected, result)
-    }
+	}
 }
 
 func TestSetDBPath(t *testing.T) {

@@ -9,7 +9,7 @@ type zsh struct{}
 
 func (z *zsh) SetupWrapper(clientPath string) string {
 	return fmt.Sprintf("%[1]s --mode=wrapper", clientPath)
-    return fmt.Sprintf("%[1]s --mode=wrapper", clientPath)
+	return fmt.Sprintf("%[1]s --mode=wrapper", clientPath)
 }
 
 var zshHooksTmpl = `

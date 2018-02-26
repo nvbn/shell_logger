@@ -26,16 +26,16 @@ func testGetFirstCommand(t *testing.T) {
 }
 
 func testGetTopThreeCommands(t *testing.T) {
-	goodCommands := [][]byte{	[]byte("git push origin master"),
-								[]byte("git push origin master"),
-								[]byte("git push origin master"),
-								[]byte("git log"),
-								[]byte("git status"),
-								[]byte("git log"),
-								[]byte("git log"),
-								[]byte("git status"),
-								[]byte("git reflog"),
-								[]byte("git log")}
+	goodCommands := [][]byte{[]byte("git push origin master"),
+		[]byte("git push origin master"),
+		[]byte("git push origin master"),
+		[]byte("git log"),
+		[]byte("git status"),
+		[]byte("git log"),
+		[]byte("git log"),
+		[]byte("git status"),
+		[]byte("git reflog"),
+		[]byte("git log")}
 	for i := 0; i < len(goodCommands); i++ {
 		Insert(goodCommands[i], nil)
 	}
@@ -58,10 +58,10 @@ func testGetTopThreeCommands(t *testing.T) {
 }
 
 func testGetLessThanThreeCommands(t *testing.T) {
-	goodCommands := [][]byte{	[]byte("git push origin master"),
-								[]byte("git push origin master"),
-								[]byte("git push origin master"),
-								[]byte("git log")}
+	goodCommands := [][]byte{[]byte("git push origin master"),
+		[]byte("git push origin master"),
+		[]byte("git push origin master"),
+		[]byte("git log")}
 	for i := 0; i < len(goodCommands); i++ {
 		Insert(goodCommands[i], nil)
 	}

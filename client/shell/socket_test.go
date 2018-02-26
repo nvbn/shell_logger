@@ -1,13 +1,13 @@
 package shell
 
 import (
-	"testing"
-	"net"
-	"log"
-	"os"
-	"time"
 	"io"
+	"log"
+	"net"
+	"os"
 	"syscall"
+	"testing"
+	"time"
 )
 
 func TestSetInvalidSocketEnv(t *testing.T) {
@@ -68,7 +68,7 @@ func TestSetUpUnixSocket(t *testing.T) {
 			break
 		}
 		if n == len(msg) {
-			break;
+			break
 		}
 	}
 	done <- syscall.SIGINT

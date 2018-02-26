@@ -1,12 +1,12 @@
 package shell
 
 import (
-	"log"
 	"errors"
+	"fmt"
+	"log"
 	"net"
 	"os"
 	"os/signal"
-	"fmt"
 )
 
 func handleSocketConnection(c net.Conn) {
@@ -43,7 +43,7 @@ func handleSocketConnection(c net.Conn) {
 }
 
 // Sets up unix socket to receive info
-func SetUpUnixSocket(done chan os.Signal) (error) {
+func SetUpUnixSocket(done chan os.Signal) error {
 	if !InWrapper() {
 		var err = errors.New("Set environment variable " + SocketEnv)
 		return err
@@ -55,7 +55,7 @@ func SetUpUnixSocket(done chan os.Signal) (error) {
 		return err
 	}
 
-	unixLn, err := net.ListenUnix("unix", unixAddr )
+	unixLn, err := net.ListenUnix("unix", unixAddr)
 	if err != nil {
 		log.Fatal(err)
 		return err

@@ -1,8 +1,8 @@
 package shell
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"github.com/boltdb/bolt"
 	"log"
 )
@@ -104,7 +104,7 @@ func Insert(correct []byte, incorrect []byte) error {
 				return err
 			}
 			return nil
-			})
+		})
 		return err
 	} else {
 		jsonObject, err := GetJsonValues(db, firstWord)
@@ -133,5 +133,5 @@ func Insert(correct []byte, incorrect []byte) error {
 		})
 		return err
 	}
-	
+
 }

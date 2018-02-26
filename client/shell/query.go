@@ -15,7 +15,7 @@ func GetFirstCommand(str []byte) []byte {
 			return str[:i]
 		}
 	}
-    return str
+	return str
 }
 
 func Min(x, y int) int {
@@ -27,7 +27,7 @@ func Min(x, y int) int {
 
 type commandCount struct {
 	frequency int
-	command string
+	command   string
 }
 
 type commandCountCollection []*commandCount

@@ -2,12 +2,12 @@ package shell
 
 import (
 	"github.com/boltdb/bolt"
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 // Clears and reloads the bucket
-func ClearData() error{
+func ClearData() error {
 	db := openConn()
 	defer db.Close()
 
@@ -44,7 +44,7 @@ func testPutGet(t *testing.T) {
 	assert.Equal(t, secondCorr, command2[0])
 }
 
-func TestDB(t *testing.T){
+func TestDB(t *testing.T) {
 	SetupDatabase("test.db")
 
 	t.Run("TestPutGet", testPutGet)

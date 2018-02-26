@@ -20,7 +20,6 @@ const FuckCommand = "__SHELL_LOGGER_FUCK_CMD"
 
 const DBPathEnv = "__SHELL_LOGGER_DB_PATH"
 
-
 var DBPath string
 
 type Shell interface {
@@ -55,11 +54,11 @@ func InWrapper() bool {
 }
 
 func GetFailedCommand() string {
-    return os.Getenv(FailedCommandEnv)
+	return os.Getenv(FailedCommandEnv)
 }
 
 func GetSuccessfulCommand() string {
-    return os.Getenv(CommandEnv)
+	return os.Getenv(CommandEnv)
 }
 
 func GetDBPath() string {
