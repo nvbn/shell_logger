@@ -12,13 +12,21 @@ const SocketEnv = "__SHELL_LOGGER_SOCKET"
 
 const CommandEnv = "__SHELL_LOGGER_COMMAND"
 
+const FailedCommandEnv = "__SHELL_LOGGER_FAILED_COMMAND"
+
 const StartTimeEnv = "__SHELL_LOGGER_START_TIME"
+
+const FuckCommand = "__SHELL_LOGGER_FUCK_CMD"
+
+const DBPathEnv = "__SHELL_LOGGER_DB_PATH"
+
+var DBPath string
 
 type Shell interface {
 	// Returns shell specific code for starting our wrapper
 	SetupWrapper(clientPath string) string
 	// Returns shell specific code for pre/post command hooks
-	SetupHooks(clientPath string) string
+	SetupHooks(clientPath string, dbPath string) string
 }
 
 // Returns current shell or error
@@ -43,4 +51,16 @@ func Get() (Shell, error) {
 // Returns true when client runs inside the wrapper
 func InWrapper() bool {
 	return os.Getenv(SocketEnv) != ""
+}
+
+func GetFailedCommand() string {
+	return os.Getenv(FailedCommandEnv)
+}
+
+func GetSuccessfulCommand() string {
+	return os.Getenv(CommandEnv)
+}
+
+func GetDBPath() string {
+	return os.Getenv(DBPathEnv)
 }

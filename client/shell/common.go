@@ -6,18 +6,26 @@ import (
 )
 
 type hooksOptions struct {
-	ClientPath    string
-	ReturnCodeEnv string
-	CommandEnv    string
-	StartTimeEnv  string
+	ReturnCodeEnv    string
+	CommandEnv       string
+	StartTimeEnv     string
+	FailedCommandEnv string
+	FuckCommand      string
+	BinaryPath       string
+	DatabasePathEnv  string
+	DatabasePath     string
 }
 
-func renderHooks(tmpl *template.Template, clientPath string) string {
+func renderHooks(tmpl *template.Template, clientPath string, dbPath string) string {
 	hookOptions := hooksOptions{
-		ClientPath:    clientPath,
-		ReturnCodeEnv: ReturnCodeEnv,
-		CommandEnv:    CommandEnv,
-		StartTimeEnv:  StartTimeEnv,
+		BinaryPath:       clientPath,
+		ReturnCodeEnv:    ReturnCodeEnv,
+		FailedCommandEnv: FailedCommandEnv,
+		CommandEnv:       CommandEnv,
+		StartTimeEnv:     StartTimeEnv,
+		FuckCommand:      FuckCommand,
+		DatabasePathEnv:  DBPathEnv,
+		DatabasePath:     dbPath,
 	}
 
 	var hook bytes.Buffer

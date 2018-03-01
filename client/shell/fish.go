@@ -17,15 +17,14 @@ function __shell_logger_preexec -e fish_preexec
     {{.StartTimeEnv}}=(date -u +"%Y-%m-%dT%H:%M:%SZ") \
     {{.ReturnCodeEnv}}=$status \
     {{.CommandEnv}}=$history[1] \
-    {{.ClientPath}} --mode=submit
+    shell_logger --mode=submit
 end
 `
 
-func (f *fish) SetupHooks(clientPath string) string {
+func (f *fish) SetupHooks(clientPath string, dbPath string) string {
 	tmpl, err := template.New("fish-hook").Parse(fishHooksTmpl)
 	if err != nil {
 		panic(err)
 	}
-
-	return renderHooks(tmpl, clientPath)
+	return renderHooks(tmpl, clientPath, dbPath)
 }

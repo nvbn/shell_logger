@@ -16,7 +16,7 @@ func TestFish_SetupWrapper(t *testing.T) {
 func TestFish_SetupHooks(t *testing.T) {
 	f := fish{}
 
-	result := f.SetupHooks("shell_logger")
+	result := f.SetupHooks("shell_logger", "test.db")
 	expected := `
 function __shell_logger_preexec -e fish_preexec
   env \
