@@ -1,14 +1,14 @@
 package main
 
 import (
-	"os/exec"
-	"os"
-	"os/signal"
-	"syscall"
+	"bufio"
 	"github.com/kr/pty"
 	"golang.org/x/crypto/ssh/terminal"
 	"io"
-	"bufio"
+	"os"
+	"os/exec"
+	"os/signal"
+	"syscall"
 )
 
 func handleResize(ptmx *os.File) {
@@ -28,7 +28,7 @@ func handleStdin(ptmx *os.File) {
 	io.Copy(ptmx, os.Stdin)
 }
 
-func handleStdout(ptmx *os.File, ch chan<-byte) {
+func handleStdout(ptmx *os.File, ch chan<- byte) {
 	buf := make([]byte, 1)
 	for {
 		n, err := ptmx.Read(buf)
@@ -71,7 +71,7 @@ func main() {
 	f, err := os.Create("/tmp/shell_output")
 	w := bufio.NewWriter(f)
 	for {
-		b := <- ch
+		b := <-ch
 		w.WriteByte(b)
 		w.Flush()
 		f.Sync()
