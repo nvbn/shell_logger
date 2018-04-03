@@ -8,6 +8,7 @@ import (
 	"github.com/kr/pty"
 	"golang.org/x/crypto/ssh/terminal"
 	"io"
+	"bufio"
 )
 
 func handleResize(ptmx *os.File) {
@@ -27,7 +28,7 @@ func handleStdin(ptmx *os.File) {
 	io.Copy(ptmx, os.Stdin)
 }
 
-func handleStdout(ptmx *os.File) {
+func handleStdout(ptmx *os.File, ch chan<-byte) {
 	buf := make([]byte, 1)
 	for {
 		n, err := ptmx.Read(buf)
@@ -40,7 +41,7 @@ func handleStdout(ptmx *os.File) {
 		}
 
 		os.Stdout.Write(buf)
-
+		ch <- buf[0]
 	}
 }
 
@@ -63,5 +64,16 @@ func main() {
 	defer terminal.Restore(int(os.Stdin.Fd()), oldState)
 
 	go handleStdin(ptmx)
-	handleStdout(ptmx)
+
+	ch := make(chan byte)
+	go handleStdout(ptmx, ch)
+
+	f, err := os.Create("/tmp/shell_output")
+	w := bufio.NewWriter(f)
+	for {
+		b := <- ch
+		w.WriteByte(b)
+		w.Flush()
+		f.Sync()
+	}
 }
