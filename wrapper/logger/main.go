@@ -50,7 +50,7 @@ func handleStdout(ptmx *os.File, ch chan<- []byte) {
 	}
 }
 
-func Wrap(cmd *exec.Cmd, output <-chan []byte) error {
+func Wrap(cmd *exec.Cmd, output chan<- []byte) error {
 	ptmx, err := pty.Start(cmd)
 	if err != nil {
 		return err
