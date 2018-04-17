@@ -1,7 +1,6 @@
-package main
+package logger
 
 import (
-	"bufio"
 	"github.com/kr/pty"
 	"golang.org/x/crypto/ssh/terminal"
 	"io"
@@ -28,10 +27,12 @@ func handleStdin(ptmx *os.File) {
 	io.Copy(ptmx, os.Stdin)
 }
 
-func handleStdout(ptmx *os.File, ch chan<- byte) {
-	buf := make([]byte, 1)
+func handleStdout(ptmx *os.File, ch chan<- []byte) {
+	readBuffer := make([]byte, 1)
+	sendBuffer := make([]byte, 0)
+
 	for {
-		n, err := ptmx.Read(buf)
+		n, err := ptmx.Read(readBuffer)
 		if err != nil {
 			panic(err)
 		}
@@ -40,17 +41,19 @@ func handleStdout(ptmx *os.File, ch chan<- byte) {
 			os.Exit(0)
 		}
 
-		os.Stdout.Write(buf)
-		ch <- buf[0]
+		os.Stdout.Write(readBuffer)
+		sendBuffer = append(sendBuffer, readBuffer[0])
+
+		if readBuffer[0] == '\n' {
+			ch <- sendBuffer
+		}
 	}
 }
 
-func main() {
-	cmd := exec.Command("bash")
-
+func Wrap(cmd *exec.Cmd, output <-chan []byte) error {
 	ptmx, err := pty.Start(cmd)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	defer ptmx.Close()
@@ -59,21 +62,14 @@ func main() {
 
 	oldState, err := terminal.MakeRaw(int(os.Stdin.Fd()))
 	if err != nil {
-		panic(err)
+		return err
 	}
+
 	defer terminal.Restore(int(os.Stdin.Fd()), oldState)
 
 	go handleStdin(ptmx)
 
-	ch := make(chan byte)
-	go handleStdout(ptmx, ch)
+	handleStdout(ptmx, output)
 
-	f, err := os.Create("/tmp/shell_output")
-	w := bufio.NewWriter(f)
-	for {
-		b := <-ch
-		w.WriteByte(b)
-		w.Flush()
-		f.Sync()
-	}
+	return nil
 }
