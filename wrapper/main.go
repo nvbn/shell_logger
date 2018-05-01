@@ -1,10 +1,10 @@
 package main
 
 import (
-	"os/exec"
+	"github.com/nvbn/shell_logger/wrapper/bus"
 	"github.com/nvbn/shell_logger/wrapper/logger"
 	"github.com/nvbn/shell_logger/wrapper/storage"
-	"github.com/nvbn/shell_logger/wrapper/bus"
+	"os/exec"
 )
 
 func main() {

@@ -3,11 +3,11 @@ package storage
 import "sync"
 
 type Command struct {
-	Command string
-	Output string
-	ReturnCode int
-	StartTime string
-	EndTime string
+	Command    string `json:"command"`
+	Output     string `json:"output"`
+	ReturnCode int    `json:"returnCode"`
+	StartTime  int    `json:"time"`
+	EndTime    int    `json:"time"`
 }
 
 type Storage struct {
@@ -33,22 +33,31 @@ func New(buffer <-chan []byte) *Storage {
 	return storage
 }
 
-func (s *Storage) StartListen(time string) {
+func (s *Storage) StartListening(time int) {
 	s.mutex.Lock()
-	s.currentCommand = &Command{"", "", -1, time, ""}
-	s.mutex.Unlock()
+	defer s.mutex.Unlock()
+
+	s.currentCommand = &Command{"", "", -1, time, -1}
 }
 
-func (s *Storage) StopListen(command string, returnCode int, time string) {
+func (s *Storage) StopListening(command string, returnCode int, time int) {
 	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
 	s.currentCommand.Command = command
 	s.currentCommand.ReturnCode = returnCode
 	s.currentCommand.EndTime = time
 	s.previousCommands = append(s.previousCommands, s.currentCommand)
 	s.currentCommand = nil
-	s.mutex.Unlock()
 }
 
-func (s *Storage) Get(number int) *Command {
-	return s.previousCommands[number]
+func (s *Storage) List(count int) []*Command {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	if count > len(s.previousCommands) {
+		count = len(s.previousCommands)
+	}
+
+	return s.previousCommands[:count]
 }
