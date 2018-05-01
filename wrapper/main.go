@@ -7,14 +7,21 @@ import (
 	"github.com/nvbn/shell_logger/wrapper/storage"
 	"os"
 	"os/exec"
+	"github.com/nvbn/shell_logger/shell"
+	"github.com/satori/go.uuid"
 )
 
-func main() {
-	command := exec.Command("bash")
-	buffer := make(chan []byte)
+func generateSocketPath() string {
+	id := uuid.NewV4()
+	return fmt.Sprintf("/tmp/shell-logger-%s", id)
+}
+
+func wrapShell(sh shell.Shell) chan []byte {
+	command := exec.Command(sh.GetPath())
+	output := make(chan []byte)
 
 	go func() {
-		err := logger.Wrap(command, buffer)
+		err := logger.Wrap(command, output)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -22,7 +29,15 @@ func main() {
 		os.Exit(0)
 	}()
 
-	store := storage.NewInMemory(buffer)
+	return output
+}
 
-	bus.Start("/tmp/test", store)
+func main() {
+	sh, _ := shell.Get()
+	socketPath := generateSocketPath()
+	os.Setenv(shell.SocketEnv, socketPath)
+	output := wrapShell(sh)
+	store := storage.NewInMemory(output)
+	fmt.Println("Wrapper started on", socketPath)
+	bus.Start(socketPath, store)
 }
