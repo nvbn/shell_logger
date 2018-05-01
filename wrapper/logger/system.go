@@ -1,22 +1,21 @@
 package logger
 
 import (
+	"github.com/kr/pty"
 	"os"
 	"os/signal"
 	"syscall"
-	"github.com/kr/pty"
 )
 
 func handleResize(ptmx *os.File) {
-	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, syscall.SIGWINCH)
+	resize := make(chan os.Signal, 1)
+	signal.Notify(resize, syscall.SIGWINCH)
 
 	go func() {
-		for range ch {
+		for range resize {
 			pty.InheritSize(os.Stdin, ptmx)
 		}
 	}()
 
-	ch <- syscall.SIGWINCH
+	resize <- syscall.SIGWINCH
 }
-

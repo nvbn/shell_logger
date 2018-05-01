@@ -5,6 +5,7 @@ import (
 	"net"
 )
 
+// Starts bus for communication between clients and wrapper.
 func Start(socketPath string, store storage.Storage) error {
 	unixAddr, err := net.ResolveUnixAddr("unix", socketPath)
 	if err != nil {

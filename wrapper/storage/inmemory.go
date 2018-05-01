@@ -19,12 +19,6 @@ func handleBuffer(storage *inMemoryStorage, buffer <-chan []byte) {
 	}
 }
 
-func NewInMemory(buffer <-chan []byte) *inMemoryStorage {
-	storage := &inMemoryStorage{nil, nil, &sync.Mutex{}}
-	go handleBuffer(storage, buffer)
-	return storage
-}
-
 func (s *inMemoryStorage) StartListening(startTime int) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
