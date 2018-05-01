@@ -12,7 +12,7 @@ import (
 )
 
 func generateSocketPath() string {
-	id := uuid.NewV4()
+	id, _ := uuid.NewV4()
 	return fmt.Sprintf("/tmp/shell-logger-%s", id)
 }
 
