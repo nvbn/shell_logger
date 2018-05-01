@@ -1,7 +1,6 @@
 package storage
 
-import "sync"
-
+// Logged entry for previously executed shell command.
 type Command struct {
 	Command    string `json:"command"`
 	Output     string `json:"output"`
@@ -10,54 +9,14 @@ type Command struct {
 	EndTime    int    `json:"time"`
 }
 
-type Storage struct {
-	currentCommand   *Command
-	previousCommands []*Command
-	mutex            *sync.Mutex
-}
+// Storage for history of commands.
+type Storage interface {
+	// Start listening to shell logger.
+	StartListening(startTime int)
 
-func handleBuffer(storage *Storage, buffer <-chan []byte) {
-	for {
-		line := <-buffer
-		storage.mutex.Lock()
-		if storage.currentCommand != nil {
-			storage.currentCommand.Output += string(line)
-		}
-		storage.mutex.Unlock()
-	}
-}
+	// Stop listening to shell logger.
+	StopListening(command string, returnCode int, endTime int)
 
-func New(buffer <-chan []byte) *Storage {
-	storage := &Storage{nil, nil, &sync.Mutex{}}
-	go handleBuffer(storage, buffer)
-	return storage
-}
-
-func (s *Storage) StartListening(time int) {
-	s.mutex.Lock()
-	defer s.mutex.Unlock()
-
-	s.currentCommand = &Command{"", "", -1, time, -1}
-}
-
-func (s *Storage) StopListening(command string, returnCode int, time int) {
-	s.mutex.Lock()
-	defer s.mutex.Unlock()
-
-	s.currentCommand.Command = command
-	s.currentCommand.ReturnCode = returnCode
-	s.currentCommand.EndTime = time
-	s.previousCommands = append(s.previousCommands, s.currentCommand)
-	s.currentCommand = nil
-}
-
-func (s *Storage) List(count int) []*Command {
-	s.mutex.Lock()
-	defer s.mutex.Unlock()
-
-	if count > len(s.previousCommands) {
-		count = len(s.previousCommands)
-	}
-
-	return s.previousCommands[:count]
+	// List logged commands:
+	List(count int) []*Command
 }

@@ -8,7 +8,7 @@ import (
 	"net"
 )
 
-func handleSocketConnection(connection net.Conn, store *storage.Storage) {
+func handleSocketConnection(connection net.Conn, store storage.Storage) {
 	reader := bufio.NewReader(connection)
 	writer := bufio.NewWriter(connection)
 
@@ -42,7 +42,7 @@ func handleSocketConnection(connection net.Conn, store *storage.Storage) {
 	}
 }
 
-func listenAndServe(unixLn *net.UnixListener, store *storage.Storage) {
+func listenAndServe(unixLn *net.UnixListener, store storage.Storage) {
 	for {
 		unixConn, err := unixLn.Accept()
 		if err != nil {

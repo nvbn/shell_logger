@@ -5,7 +5,7 @@ import (
 	"net"
 )
 
-func Start(socketPath string, store *storage.Storage) error {
+func Start(socketPath string, store storage.Storage) error {
 	unixAddr, err := net.ResolveUnixAddr("unix", socketPath)
 	if err != nil {
 		return err

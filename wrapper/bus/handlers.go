@@ -2,7 +2,7 @@ package bus
 
 import "github.com/nvbn/shell_logger/wrapper/storage"
 
-func startListening(store *storage.Storage, bytes []byte) []byte {
+func startListening(store storage.Storage, bytes []byte) []byte {
 	request, err := newStartListeningRequest(bytes)
 
 	if err != nil {
@@ -14,7 +14,7 @@ func startListening(store *storage.Storage, bytes []byte) []byte {
 	return okResponse
 }
 
-func stopListening(store *storage.Storage, bytes []byte) []byte {
+func stopListening(store storage.Storage, bytes []byte) []byte {
 	request, err := newStopListeningRequest(bytes)
 
 	if err != nil {
@@ -26,7 +26,7 @@ func stopListening(store *storage.Storage, bytes []byte) []byte {
 	return okResponse
 }
 
-func list(store *storage.Storage, bytes []byte) []byte {
+func list(store storage.Storage, bytes []byte) []byte {
 	request, err := newListRequest(bytes)
 
 	if err != nil {

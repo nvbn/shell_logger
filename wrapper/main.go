@@ -11,6 +11,6 @@ func main() {
 	command := exec.Command("bash")
 	buffer := make(chan []byte)
 	go logger.Wrap(command, buffer)
-	store := storage.New(buffer)
+	store := storage.NewInMemory(buffer)
 	bus.Start("/tmp/test", store)
 }
