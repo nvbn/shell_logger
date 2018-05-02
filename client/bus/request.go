@@ -8,7 +8,7 @@ import (
 //	{"type": "startListening", "time": 1525212510}
 type StartListeningRequest struct {
 	Type string `json:"type"`
-	Time int `json:"time"`
+	Time int    `json:"time"`
 }
 
 const startListeningType = "startListening"

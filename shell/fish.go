@@ -5,7 +5,7 @@ import (
 	"text/template"
 )
 
-type fish struct{
+type fish struct {
 	path string
 }
 

@@ -15,11 +15,11 @@ type hooksOptions struct {
 
 func renderHooks(tmpl *template.Template, clientPath string) string {
 	hookOptions := hooksOptions{
-		BinaryPath:       clientPath,
-		ReturnCodeEnv:    ReturnCodeEnv,
-		CommandEnv:       CommandEnv,
-		StartTimeEnv:     StartTimeEnv,
-		EndTimeEnv: EndTimeEnv,
+		BinaryPath:    clientPath,
+		ReturnCodeEnv: ReturnCodeEnv,
+		CommandEnv:    CommandEnv,
+		StartTimeEnv:  StartTimeEnv,
+		EndTimeEnv:    EndTimeEnv,
 	}
 
 	var hook bytes.Buffer

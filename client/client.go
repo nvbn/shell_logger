@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/nvbn/shell_logger/shell"
 	"github.com/nvbn/shell_logger/client/bus"
+	"github.com/nvbn/shell_logger/shell"
 	"os"
 	"strconv"
 )

@@ -2,8 +2,8 @@ package bus
 
 import (
 	"bufio"
-	"net"
 	"fmt"
+	"net"
 )
 
 func communicate(socketPath string, body []byte) ([]byte, error) {

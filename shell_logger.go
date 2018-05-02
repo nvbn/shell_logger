@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/nvbn/shell_logger/shell"
 	"flag"
-	"os"
-	"github.com/nvbn/shell_logger/configurator"
-	"github.com/nvbn/shell_logger/wrapper"
 	"github.com/nvbn/shell_logger/client"
+	"github.com/nvbn/shell_logger/configurator"
+	"github.com/nvbn/shell_logger/shell"
+	"github.com/nvbn/shell_logger/wrapper"
+	"os"
 )
 
 func main() {
@@ -32,13 +32,13 @@ func main() {
 
 	flag.Parse()
 
-	if (configure) {
+	if configure {
 		configurator.Configure(clientPath, sh)
-	} else if (wrap) {
+	} else if wrap {
 		wrapper.Wrap(sh)
-	} else if (startListening) {
+	} else if startListening {
 		client.StartListening()
-	} else if (stopListening) {
+	} else if stopListening {
 		client.StopListening()
 	} else {
 		flag.Usage()

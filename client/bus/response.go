@@ -28,7 +28,7 @@ func isOk(body []byte) bool {
 // Error response:
 //	{"status": "error", "error": "everything"}
 type ErrorResponse struct {
-	Error  string `json:"error"`
+	Error string `json:"error"`
 }
 
 func getError(body []byte) error {

@@ -1,8 +1,8 @@
 package configurator
 
 import (
-	"github.com/nvbn/shell_logger/shell"
 	"fmt"
+	"github.com/nvbn/shell_logger/shell"
 )
 
 func Configure(clientPath string, sh shell.Shell) {

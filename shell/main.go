@@ -16,7 +16,6 @@ const StartTimeEnv = "__SHELL_LOGGER_START_TIME"
 
 const EndTimeEnv = "__SHELL_LOGGER_END_TIME"
 
-
 type Shell interface {
 	// Returns shell path
 	GetPath() string

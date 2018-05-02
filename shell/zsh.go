@@ -5,7 +5,7 @@ import (
 	"text/template"
 )
 
-type zsh struct{
+type zsh struct {
 	path string
 }
 
