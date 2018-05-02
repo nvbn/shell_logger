@@ -8,7 +8,7 @@ import (
 
 const ReturnCodeEnv = "__SHELL_LOGGER_RETURN_CODE"
 
-const SocketEnv = "__SHELL_LOGGER_SOCKET"
+const SocketEnv = "SHELL_LOGGER_SOCKET"
 
 const CommandEnv = "__SHELL_LOGGER_COMMAND"
 

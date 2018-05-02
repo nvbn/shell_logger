@@ -30,6 +30,10 @@ func (s *inMemoryStorage) StopListening(command string, returnCode int, endTime 
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
+	if s.currentCommand == nil {
+		return;
+	}
+
 	s.currentCommand.Command = command
 	s.currentCommand.ReturnCode = returnCode
 	s.currentCommand.EndTime = endTime

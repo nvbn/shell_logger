@@ -14,20 +14,25 @@ func (z *zsh) GetPath() string {
 }
 
 func (z *zsh) SetupWrapper(clientPath string) string {
-	return fmt.Sprintf("%[1]s --mode=wrapper", clientPath)
+	return fmt.Sprintf("%[1]s --wrap", clientPath)
 }
 
 var zshHooksTmpl = `
-preexec () {
-	export {{.StartTimeEnv}}=$(date +%s)
-}
-precmd () {
-	export {{.ReturnCodeEnv}}=$?
-	export {{.CommandEnv}}=$(fc -ln -1)
-	export {{.FailedCommandEnv}}=$(fc -ln -3 | head -n 1)
-	export {{.EndTimeEnv}}=$(date +%s)
-	shell_logger --mode=submit
-}
+function shell_logger_preexec () {
+	export {{.StartTimeEnv}}=$(date +%s);
+	{{.BinaryPath}} --start-listening;
+};
+
+function shell_logger_precmd () {
+	export {{.ReturnCodeEnv}}=$?;
+	export {{.CommandEnv}}=$(fc -ln -1);
+	export {{.EndTimeEnv}}=$(date +%s);
+	{{.BinaryPath}} --stop-listening
+};
+
+autoload -Uz add-zsh-hook;
+add-zsh-hook -Uz preexec shell_logger_preexec;
+add-zsh-hook -Uz precmd shell_logger_precmd;
 `
 
 func (z *zsh) SetupHooks(clientPath string) string {

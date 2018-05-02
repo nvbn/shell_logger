@@ -1,4 +1,4 @@
-package main
+package wrapper
 
 import (
 	"fmt"
@@ -32,8 +32,7 @@ func wrapShell(sh shell.Shell) chan []byte {
 	return output
 }
 
-func main() {
-	sh, _ := shell.Get()
+func Wrap(sh shell.Shell) {
 	socketPath := generateSocketPath()
 	os.Setenv(shell.SocketEnv, socketPath)
 	output := wrapShell(sh)

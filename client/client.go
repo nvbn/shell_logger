@@ -1,70 +1,39 @@
-package main
+package client
 
 import (
-	"flag"
-	"fmt"
-	"github.com/nvbn/shell_logger/client/shell"
-	"log"
+	"github.com/nvbn/shell_logger/shell"
+	"github.com/nvbn/shell_logger/client/bus"
 	"os"
+	"strconv"
 )
 
-func configure() {
-	clientPath, err := os.Executable()
+func StartListening() {
+	socketPath := os.Getenv(shell.SocketEnv)
+	startTime, err := strconv.Atoi(os.Getenv(shell.StartTimeEnv))
 	if err != nil {
 		panic(err)
 	}
 
-	sh, err := shell.Get()
+	bus.StartListening(socketPath, startTime)
+}
+
+func StopListening() {
+	socketPath := os.Getenv(shell.SocketEnv)
+	command := os.Getenv(shell.CommandEnv)
+	returnCode, err := strconv.Atoi(os.Getenv(shell.ReturnCodeEnv))
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(sh.SetupHooks(clientPath, shell.DBPath))
-}
-
-func inspect(key *string) {
-	shell.SetupDatabase(shell.DBPath)
-	goodCommands, err := shell.GetGoodCommands([]byte(*key))
+	endTime, err := strconv.Atoi(os.Getenv(shell.EndTimeEnv))
 	if err != nil {
-		log.Fatal(err)
-	}
-	for _, goodCommand := range goodCommands {
-		fmt.Println(string(goodCommand))
-	}
-}
-
-func main() {
-	mode := flag.String("mode", "", "configure|daemon|wrapper|submit")
-	key := flag.String("key", "", "key to inspect")
-
-	flag.Parse()
-
-	shell.DBPath = shell.GetDBPath()
-	if shell.DBPath == "" {
-		log.Fatal("Database path should be specified")
+		panic(err)
 	}
 
-	switch *mode {
-	case "configure":
-		configure()
-	case "inspect":
-		inspect(key)
-	case "daemon":
-		shell.SetupDatabase(shell.DBPath)
-		done := make(chan os.Signal, 1)
-		shell.SetUpUnixSocket(done)
-	case "wrapper":
-		fmt.Println("wrapper")
-	case "submit":
-		var successfulCommand string = os.Getenv(shell.CommandEnv)
-		var failedCommand string = os.Getenv(shell.FailedCommandEnv)
-
-		err := shell.Insert([]byte(successfulCommand), []byte(failedCommand))
-		if err != nil {
-			log.Fatal(err)
-		}
-	default:
-		flag.Usage()
-		os.Exit(2)
-	}
+	bus.StopListening(
+		socketPath,
+		command,
+		returnCode,
+		endTime,
+	)
 }

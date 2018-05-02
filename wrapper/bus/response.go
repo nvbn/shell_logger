@@ -17,9 +17,11 @@ func response(status string) []byte {
 	return bytes
 }
 
+const statusOk = "ok"
+
 // OK response:
 //	{"status": "ok"}
-var okResponse = response("ok")
+var okResponse = response(statusOk)
 
 // Error response:
 //	{"status": "error", "error": "everything"}
@@ -28,8 +30,10 @@ type ErrorResponse struct {
 	Error  string `json:"error"`
 }
 
+const statusError = "error"
+
 func errorResponse(err error) []byte {
-	bytes, _ := json.Marshal(&ErrorResponse{"error", err.Error()})
+	bytes, _ := json.Marshal(&ErrorResponse{statusError, err.Error()})
 
 	return bytes
 }
@@ -42,7 +46,7 @@ type ListResponse struct {
 }
 
 func listResponse(commands []*storage.Command) []byte {
-	bytes, _ := json.Marshal(&ListResponse{"ok", commands})
+	bytes, _ := json.Marshal(&ListResponse{statusOk, commands})
 
 	return bytes
 }

@@ -36,8 +36,16 @@ func handleSocketConnection(connection net.Conn, store storage.Storage) {
 			))
 		}
 
-		writer.Write(append(response, '\n'))
-		writer.Flush()
+		_, err = writer.Write(append(response, '\n'))
+		if err != nil {
+			return
+		}
+
+		err = writer.Flush()
+		if err != nil {
+			return
+		}
+
 		fmt.Println("Response: ", string(response))
 	}
 }
