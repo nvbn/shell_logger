@@ -12,6 +12,8 @@ import (
 	"os/exec"
 )
 
+const logPrefix = "WRAPPER: "
+
 func generateSocketPath() string {
 	id, _ := uuid.NewV4()
 	return fmt.Sprintf("/tmp/shell-logger-%s", id)
@@ -34,6 +36,8 @@ func wrapShell(sh shell.Shell) chan []byte {
 }
 
 func Wrap(sh shell.Shell) {
+	log.SetPrefix(logPrefix)
+
 	socketPath := generateSocketPath()
 	os.Setenv(shell.SocketEnv, socketPath)
 	output := wrapShell(sh)

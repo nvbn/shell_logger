@@ -28,6 +28,7 @@ func handleStdout(ptmx *os.File, output chan<- []byte) error {
 
 		if readBuffer[0] == '\n' {
 			output <- sendBuffer
+			sendBuffer = make([]byte, 0)
 		}
 	}
 

@@ -7,8 +7,8 @@ type Command struct {
 	Command    string `json:"command"`
 	Output     string `json:"output"`
 	ReturnCode int    `json:"returnCode"`
-	StartTime  int    `json:"time"`
-	EndTime    int    `json:"time"`
+	StartTime  int    `json:"startTime"`
+	EndTime    int    `json:"endTime"`
 }
 
 // Storage for history of commands.
@@ -25,7 +25,7 @@ type Storage interface {
 
 // Creates new in-memory storage instance.
 func NewInMemory(buffer <-chan []byte) Storage {
-	storage := &inMemoryStorage{nil, nil, &sync.Mutex{}}
+	storage := &inMemoryStorage{nil, []*Command{}, &sync.Mutex{}}
 	go handleBuffer(storage, buffer)
 	return storage
 }

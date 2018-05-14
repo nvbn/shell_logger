@@ -3,11 +3,16 @@ package client
 import (
 	"github.com/nvbn/shell_logger/client/bus"
 	"github.com/nvbn/shell_logger/shell"
+	"log"
 	"os"
 	"strconv"
 )
 
+const logPrefix = "CLIENT: "
+
 func StartListening() {
+	log.SetPrefix(logPrefix)
+
 	socketPath := os.Getenv(shell.SocketEnv)
 	startTime, err := strconv.Atoi(os.Getenv(shell.StartTimeEnv))
 	if err != nil {
@@ -18,6 +23,8 @@ func StartListening() {
 }
 
 func StopListening() {
+	log.SetPrefix(logPrefix)
+
 	socketPath := os.Getenv(shell.SocketEnv)
 	command := os.Getenv(shell.CommandEnv)
 	returnCode, err := strconv.Atoi(os.Getenv(shell.ReturnCodeEnv))

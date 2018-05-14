@@ -37,7 +37,7 @@ func (s *inMemoryStorage) StopListening(command string, returnCode int, endTime 
 	s.currentCommand.Command = command
 	s.currentCommand.ReturnCode = returnCode
 	s.currentCommand.EndTime = endTime
-	s.previousCommands = append(s.previousCommands, s.currentCommand)
+	s.previousCommands = append([]*Command{s.currentCommand}, s.previousCommands...)
 	s.currentCommand = nil
 }
 
