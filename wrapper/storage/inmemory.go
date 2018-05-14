@@ -8,14 +8,21 @@ type inMemoryStorage struct {
 	mutex            *sync.Mutex
 }
 
-func handleBuffer(storage *inMemoryStorage, buffer <-chan []byte) {
+// Creates new in-memory storage instance.
+func NewInMemory(buffer <-chan []byte) *inMemoryStorage {
+	storage := &inMemoryStorage{nil, []*Command{}, &sync.Mutex{}}
+	go storage.handleBuffer(buffer)
+	return storage
+}
+
+func (s *inMemoryStorage) handleBuffer(buffer <-chan []byte) {
 	for {
 		line := <-buffer
-		storage.mutex.Lock()
-		if storage.currentCommand != nil {
-			storage.currentCommand.Output += string(line)
+		s.mutex.Lock()
+		if s.currentCommand != nil {
+			s.currentCommand.Output += string(line)
 		}
-		storage.mutex.Unlock()
+		s.mutex.Unlock()
 	}
 }
 

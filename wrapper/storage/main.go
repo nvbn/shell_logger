@@ -1,7 +1,5 @@
 package storage
 
-import "sync"
-
 // Logged entry for previously executed shell command.
 type Command struct {
 	Command    string `json:"command"`
@@ -21,11 +19,4 @@ type Storage interface {
 
 	// List logged commands:
 	List(count int) []*Command
-}
-
-// Creates new in-memory storage instance.
-func NewInMemory(buffer <-chan []byte) Storage {
-	storage := &inMemoryStorage{nil, []*Command{}, &sync.Mutex{}}
-	go handleBuffer(storage, buffer)
-	return storage
 }
