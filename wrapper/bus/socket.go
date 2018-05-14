@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/nvbn/shell_logger/wrapper/storage"
+	"log"
 	"net"
 )
 
@@ -18,7 +19,7 @@ func handleSocketConnection(connection net.Conn, store storage.Storage) {
 			return
 		}
 
-		fmt.Println("Request: ", string(bytes))
+		log.Println("Request: ", string(bytes))
 
 		var response []byte
 		type_ := requestType(bytes)
@@ -46,7 +47,7 @@ func handleSocketConnection(connection net.Conn, store storage.Storage) {
 			return
 		}
 
-		fmt.Println("Response: ", string(response))
+		log.Println("Response: ", string(response))
 	}
 }
 

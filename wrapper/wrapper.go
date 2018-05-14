@@ -7,6 +7,7 @@ import (
 	"github.com/nvbn/shell_logger/wrapper/logger"
 	"github.com/nvbn/shell_logger/wrapper/storage"
 	"github.com/satori/go.uuid"
+	"log"
 	"os"
 	"os/exec"
 )
@@ -23,7 +24,7 @@ func wrapShell(sh shell.Shell) chan []byte {
 	go func() {
 		err := logger.Wrap(command, output)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			os.Exit(1)
 		}
 		os.Exit(0)
@@ -37,6 +38,6 @@ func Wrap(sh shell.Shell) {
 	os.Setenv(shell.SocketEnv, socketPath)
 	output := wrapShell(sh)
 	store := storage.NewInMemory(output)
-	fmt.Println("Wrapper started on", socketPath)
+	log.Println("Wrapper started on", socketPath)
 	bus.Start(socketPath, store)
 }

@@ -2,7 +2,7 @@ package bus
 
 import (
 	"bufio"
-	"fmt"
+	"log"
 	"net"
 )
 
@@ -14,7 +14,7 @@ func communicate(socketPath string, body []byte) ([]byte, error) {
 	defer connection.Close()
 
 	writer := bufio.NewWriter(connection)
-	fmt.Println("Sending:", string(body))
+	log.Println("Sending:", string(body))
 	_, err = writer.Write(append(body, '\n'))
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func communicate(socketPath string, body []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Received:", string(bytes))
+	log.Println("Received:", string(bytes))
 
 	return bytes, nil
 }
