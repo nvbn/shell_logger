@@ -1,8 +1,8 @@
 package storage
 
 import (
-	"testing"
 	"reflect"
+	"testing"
 	"time"
 )
 
@@ -32,20 +32,19 @@ func TestInMemoryStorage_StartListening(t *testing.T) {
 	result := store.List(10)
 	expected := []*Command{}
 
-	if  !reflect.DeepEqual(result, expected) {
+	if !reflect.DeepEqual(result, expected) {
 		t.Fatalf("Expected %s but got %s", expected, result)
 	}
 }
 
 func TestInMemoryStorage_StopListening(t *testing.T) {
-	buffer := make(chan []byte, 1)
+	buffer := make(chan []byte)
 	defer close(buffer)
 
 	store := NewInMemory(buffer)
 	time.Sleep(100)
 	buffer <- []byte("first line\n")
 	time.Sleep(100)
-
 
 	store.StartListening(0)
 	time.Sleep(100)
@@ -59,7 +58,7 @@ func TestInMemoryStorage_StopListening(t *testing.T) {
 
 	result := store.List(10)
 	expected := []*Command{
-		&Command{"ls", "second line\n", 0, 0, 1},
+		{"ls", "second line\n", 0, 0, 1},
 	}
 
 	if !reflect.DeepEqual(result, expected) {
