@@ -15,7 +15,7 @@ import (
 const logPrefix = "WRAPPER: "
 
 func generateSocketPath() string {
-	id, _ := uuid.NewV4()
+	id := uuid.NewV4()
 	return fmt.Sprintf("/tmp/shell-logger-%s", id)
 }
 
