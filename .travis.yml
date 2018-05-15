@@ -1,5 +1,7 @@
 language: go
 go:
   - 1.9
+before_install:
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 script:
   - make test
