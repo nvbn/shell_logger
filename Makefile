@@ -17,7 +17,7 @@ test:
 
 functional_test:
 	dep ensure; \
-	pip3 install -r functional_tests/requirements.txt; \
+	pip3 install --user -r functional_tests/requirements.txt; \
 	GOOS=linux GOARCH=amd64 go build -o functional_tests/shell_logger shell_logger.go; \
 	py.test functional_tests -vvvv --capture=sys
 
