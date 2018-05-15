@@ -1,7 +1,15 @@
 language: go
 go:
   - 1.9
+services:
+  - docker
+addons:
+  apt:
+    packages:
+      - python3
+      - python3-pip
 before_install:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 script:
   - make test
+  - make functional_test

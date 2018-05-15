@@ -17,3 +17,5 @@
 
 build
 vendor
+
+functional_tests/shell_logger
