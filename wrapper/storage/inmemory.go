@@ -8,6 +8,8 @@ type inMemoryStorage struct {
 	mutex            *sync.Mutex
 }
 
+const inMemoryStorageSize = 100
+
 // Creates new in-memory storage instance.
 func NewInMemory(buffer <-chan []byte) *inMemoryStorage {
 	storage := &inMemoryStorage{nil, []*Command{}, &sync.Mutex{}}
@@ -44,7 +46,12 @@ func (s *inMemoryStorage) StopListening(command string, returnCode int, endTime 
 	s.currentCommand.Command = command
 	s.currentCommand.ReturnCode = returnCode
 	s.currentCommand.EndTime = endTime
+
 	s.previousCommands = append([]*Command{s.currentCommand}, s.previousCommands...)
+	if len(s.previousCommands) > inMemoryStorageSize {
+		s.previousCommands = s.previousCommands[:inMemoryStorageSize]
+	}
+
 	s.currentCommand = nil
 }
 
