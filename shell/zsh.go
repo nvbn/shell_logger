@@ -2,6 +2,8 @@ package shell
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 	"text/template"
 )
 
@@ -42,4 +44,32 @@ func (z *zsh) SetupHooks(clientPath string) string {
 	}
 
 	return renderHooks(tmpl, clientPath)
+}
+
+func (z *zsh) InWrapper() bool {
+	return z.GetSocketPath() != ""
+}
+
+func (z *zsh) GetSocketPath() string {
+	return os.Getenv(socketEnv)
+}
+
+func (z *zsh) SetSocketPath(socketPath string) {
+	os.Setenv(socketEnv, socketPath)
+}
+
+func (z *zsh) GetStartTime() (int, error) {
+	return strconv.Atoi(os.Getenv(startTimeEnv))
+}
+
+func (z *zsh) GetCommand() string {
+	return os.Getenv(commandEnv)
+}
+
+func (z *zsh) GetReturnCode() (int, error) {
+	return strconv.Atoi(os.Getenv(returnCodeEnv))
+}
+
+func (z *zsh) GetEndTime() (int, error) {
+	return strconv.Atoi(os.Getenv(endTimeEnv))
 }

@@ -4,17 +4,15 @@ import (
 	"github.com/nvbn/shell_logger/client/bus"
 	"github.com/nvbn/shell_logger/shell"
 	"log"
-	"os"
-	"strconv"
 )
 
 const logPrefix = "CLIENT: "
 
-func StartListening() {
+func StartListening(sh shell.Shell) {
 	log.SetPrefix(logPrefix)
 
-	socketPath := os.Getenv(shell.SocketEnv)
-	startTime, err := strconv.Atoi(os.Getenv(shell.StartTimeEnv))
+	socketPath := sh.GetSocketPath()
+	startTime, err := sh.GetStartTime()
 	if err != nil {
 		panic(err)
 	}
@@ -22,17 +20,17 @@ func StartListening() {
 	bus.StartListening(socketPath, startTime)
 }
 
-func StopListening() {
+func StopListening(sh shell.Shell) {
 	log.SetPrefix(logPrefix)
 
-	socketPath := os.Getenv(shell.SocketEnv)
-	command := os.Getenv(shell.CommandEnv)
-	returnCode, err := strconv.Atoi(os.Getenv(shell.ReturnCodeEnv))
+	socketPath := sh.GetSocketPath()
+	command := sh.GetCommand()
+	returnCode, err := sh.GetReturnCode()
 	if err != nil {
 		panic(err)
 	}
 
-	endTime, err := strconv.Atoi(os.Getenv(shell.EndTimeEnv))
+	endTime, err := sh.GetEndTime()
 	if err != nil {
 		panic(err)
 	}

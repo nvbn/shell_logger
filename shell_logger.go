@@ -45,9 +45,9 @@ func main() {
 	} else if wrap {
 		wrapper.Wrap(sh)
 	} else if startListening {
-		client.StartListening()
+		client.StartListening(sh)
 	} else if stopListening {
-		client.StopListening()
+		client.StopListening(sh)
 	} else {
 		flag.Usage()
 		os.Exit(1)

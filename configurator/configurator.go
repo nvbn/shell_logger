@@ -6,7 +6,7 @@ import (
 )
 
 func Configure(clientPath string, sh shell.Shell) {
-	if shell.InWrapper() {
+	if sh.InWrapper() {
 		fmt.Println(sh.SetupHooks(clientPath))
 	} else {
 		fmt.Println(sh.SetupWrapper(clientPath))

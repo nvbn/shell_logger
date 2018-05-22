@@ -5,6 +5,16 @@ import (
 	"text/template"
 )
 
+const returnCodeEnv = "__SHELL_LOGGER_RETURN_CODE"
+
+const socketEnv = "SHELL_LOGGER_SOCKET"
+
+const commandEnv = "__SHELL_LOGGER_COMMAND"
+
+const startTimeEnv = "__SHELL_LOGGER_START_TIME"
+
+const endTimeEnv = "__SHELL_LOGGER_END_TIME"
+
 type hooksOptions struct {
 	ReturnCodeEnv string
 	CommandEnv    string
@@ -16,10 +26,10 @@ type hooksOptions struct {
 func renderHooks(tmpl *template.Template, clientPath string) string {
 	hookOptions := hooksOptions{
 		BinaryPath:    clientPath,
-		ReturnCodeEnv: ReturnCodeEnv,
-		CommandEnv:    CommandEnv,
-		StartTimeEnv:  StartTimeEnv,
-		EndTimeEnv:    EndTimeEnv,
+		ReturnCodeEnv: returnCodeEnv,
+		CommandEnv:    commandEnv,
+		StartTimeEnv:  startTimeEnv,
+		EndTimeEnv:    endTimeEnv,
 	}
 
 	var hook bytes.Buffer

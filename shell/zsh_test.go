@@ -17,7 +17,7 @@ func TestZsh_SetupHooks(t *testing.T) {
 	z := zsh{}
 
 	result := z.SetupHooks("shell_logger")
-	var expected = `
+	expected := `
 function shell_logger_preexec () {
 	export __SHELL_LOGGER_START_TIME=$(date +%s);
 	shell_logger --start-listening;

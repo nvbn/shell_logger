@@ -6,16 +6,6 @@ import (
 	"path/filepath"
 )
 
-const ReturnCodeEnv = "__SHELL_LOGGER_RETURN_CODE"
-
-const SocketEnv = "SHELL_LOGGER_SOCKET"
-
-const CommandEnv = "__SHELL_LOGGER_COMMAND"
-
-const StartTimeEnv = "__SHELL_LOGGER_START_TIME"
-
-const EndTimeEnv = "__SHELL_LOGGER_END_TIME"
-
 const DebugEnv = "SHELL_LOGGER_DEBUG"
 
 type Shell interface {
@@ -23,8 +13,22 @@ type Shell interface {
 	GetPath() string
 	// Returns shell specific code for starting our wrapper
 	SetupWrapper(clientPath string) string
+	// Returns true when shell is already in wrapper
+	InWrapper() bool
+	// Returns wrapper socket path
+	GetSocketPath() string
+	// Set socket path for child processes
+	SetSocketPath(socketPath string)
 	// Returns shell specific code for pre/post command hooks
 	SetupHooks(clientPath string) string
+	// Returns sanitized start time
+	GetStartTime() (int, error)
+	// Returns sanitized previous command
+	GetCommand() string
+	// Returns sanitized return code
+	GetReturnCode() (int, error)
+	// Returns sanitized end time
+	GetEndTime() (int, error)
 }
 
 // Returns current shell or error
@@ -37,6 +41,8 @@ func Get() (Shell, error) {
 	_, shellName := filepath.Split(shellPath)
 
 	switch shellName {
+	case "bash":
+		return &bash{shellPath}, nil
 	case "zsh":
 		return &zsh{shellPath}, nil
 	case "fish":
@@ -44,9 +50,4 @@ func Get() (Shell, error) {
 	default:
 		return nil, errors.New("Shell is not supported")
 	}
-}
-
-// Returns true when client runs inside the wrapper
-func InWrapper() bool {
-	return os.Getenv(SocketEnv) != ""
 }

@@ -39,7 +39,7 @@ func Wrap(sh shell.Shell) {
 	log.SetPrefix(logPrefix)
 
 	socketPath := generateSocketPath()
-	os.Setenv(shell.SocketEnv, socketPath)
+	sh.SetSocketPath(socketPath)
 	output := wrapShell(sh)
 	store := storage.NewInMemory(output)
 	log.Println("Wrapper started on", socketPath)

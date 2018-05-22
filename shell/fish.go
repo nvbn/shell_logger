@@ -2,6 +2,8 @@ package shell
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 	"text/template"
 )
 
@@ -33,4 +35,32 @@ func (f *fish) SetupHooks(clientPath string) string {
 		panic(err)
 	}
 	return renderHooks(tmpl, clientPath)
+}
+
+func (f *fish) InWrapper() bool {
+	return f.GetSocketPath() != ""
+}
+
+func (f *fish) GetSocketPath() string {
+	return os.Getenv(socketEnv)
+}
+
+func (f *fish) SetSocketPath(socketPath string) {
+	os.Setenv(socketEnv, socketPath)
+}
+
+func (f *fish) GetStartTime() (int, error) {
+	return strconv.Atoi(os.Getenv(startTimeEnv))
+}
+
+func (f *fish) GetCommand() string {
+	return os.Getenv(commandEnv)
+}
+
+func (f *fish) GetReturnCode() (int, error) {
+	return strconv.Atoi(os.Getenv(returnCodeEnv))
+}
+
+func (f *fish) GetEndTime() (int, error) {
+	return strconv.Atoi(os.Getenv(endTimeEnv))
 }

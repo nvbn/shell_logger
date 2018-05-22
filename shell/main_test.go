@@ -50,25 +50,3 @@ func TestGetUnsupportedShell(t *testing.T) {
 		t.Fatal("Not expected error")
 	}
 }
-
-func TestInWrapper(t *testing.T) {
-	os.Setenv(SocketEnv, "/tmp/sock")
-
-	result := InWrapper()
-	expected := true
-
-	if result != expected {
-		t.Fatalf("Expected %t but got %t", expected, result)
-	}
-}
-
-func TestInWrapperFalse(t *testing.T) {
-	os.Setenv(SocketEnv, "")
-
-	result := InWrapper()
-	expected := false
-
-	if result != expected {
-		t.Fatalf("Expected %t but got %t", expected, result)
-	}
-}
