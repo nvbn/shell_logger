@@ -41,6 +41,81 @@ precmd_functions+=(shell_logger_precmd)
 	}
 }
 
+func TestBash_InWrapper(t *testing.T) {
+	b := bash{}
+	os.Setenv(socketEnv, "/tmp/socket")
+
+	result := b.InWrapper()
+	expected := true
+
+	if result != expected {
+		t.Fatalf("Expected %s but got %s", expected, result)
+	}
+}
+
+func TestBash_InWrapper_Not(t *testing.T) {
+	b := bash{}
+	os.Setenv(socketEnv, "")
+
+	result := b.InWrapper()
+	expected := false
+
+	if result != expected {
+		t.Fatalf("Expected %s but got %s", expected, result)
+	}
+}
+
+func TestBash_GetSocketPath(t *testing.T) {
+	b := bash{}
+	os.Setenv(socketEnv, "/tmp/socket")
+
+	result := b.GetSocketPath()
+	expected := "/tmp/socket"
+
+	if result != expected {
+		t.Fatalf("Expected %s but got %s", expected, result)
+	}
+}
+
+func TestBash_SetSocketPath(t *testing.T) {
+	b := bash{}
+	b.SetSocketPath("/tmp/new-socket")
+
+	result := os.Getenv(socketEnv)
+	expected := "/tmp/new-socket"
+
+	if result != expected {
+		t.Fatalf("Expected %s but got %s", expected, result)
+	}
+}
+
+func TestBash_GetStartTime(t *testing.T) {
+	b := bash{}
+	os.Setenv(startTimeEnv, "123")
+
+	result, err := b.GetStartTime()
+	if err != nil {
+		t.Fatalf("Unexpected error %s", err)
+	}
+
+	expected := 123
+
+	if result != expected {
+		t.Fatalf("Expected %s but got %s", expected, result)
+	}
+}
+
+func TestBash_GetStartTime_NotANumber(t *testing.T) {
+	b := bash{}
+	os.Setenv(startTimeEnv, "test")
+
+	result, err := b.GetStartTime()
+
+	if err == nil {
+		t.Fatalf("Expected error but got %s", result)
+	}
+}
+
 func TestBash_GetCommand(t *testing.T) {
 	b := bash{}
 	os.Setenv(commandEnv, "    1  ls ~/.local/bin")
@@ -50,5 +125,59 @@ func TestBash_GetCommand(t *testing.T) {
 
 	if result != expected {
 		t.Fatalf("Expected %s but got %s", expected, result)
+	}
+}
+
+func TestBash_GetReturnCode(t *testing.T) {
+	b := bash{}
+	os.Setenv(returnCodeEnv, "-1")
+
+	result, err := b.GetReturnCode()
+	if err != nil {
+		t.Fatalf("Unexpected error %s", err)
+	}
+
+	expected := -1
+
+	if result != expected {
+		t.Fatalf("Expected %s but got %s", expected, result)
+	}
+}
+
+func TestBash_GetReturnCode_NotANumber(t *testing.T) {
+	b := bash{}
+	os.Setenv(returnCodeEnv, "test")
+
+	result, err := b.GetReturnCode()
+
+	if err == nil {
+		t.Fatalf("Expected error but got %s", result)
+	}
+}
+
+func TestBash_GetEndTime(t *testing.T) {
+	b := bash{}
+	os.Setenv(endTimeEnv, "123")
+
+	result, err := b.GetEndTime()
+	if err != nil {
+		t.Fatalf("Unexpected error %s", err)
+	}
+
+	expected := 123
+
+	if result != expected {
+		t.Fatalf("Expected %s but got %s", expected, result)
+	}
+}
+
+func TestBash_GetEndTime_NotANumber(t *testing.T) {
+	b := bash{}
+	os.Setenv(endTimeEnv, "test")
+
+	result, err := b.GetEndTime()
+
+	if err == nil {
+		t.Fatalf("Expected error but got %s", result)
 	}
 }

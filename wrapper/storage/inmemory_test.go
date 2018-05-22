@@ -1,35 +1,17 @@
-// +build race
-
 package storage
 
 import (
 	"reflect"
 	"testing"
+	"fmt"
 	"time"
 )
 
-func TestInMemoryStorage_NewInMemory(t *testing.T) {
+func TestInMemoryStorage_Empty(t *testing.T) {
 	buffer := make(chan []byte)
 	defer close(buffer)
 
 	store := NewInMemory(buffer)
-
-	result := reflect.TypeOf(store).String()
-	expected := "*storage.inMemoryStorage"
-
-	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
-	}
-}
-
-func TestInMemoryStorage_StartListening(t *testing.T) {
-	buffer := make(chan []byte)
-	defer close(buffer)
-
-	store := NewInMemory(buffer)
-	buffer <- []byte("first line\n")
-
-	store.StartListening(0)
 
 	result := store.List(10)
 	expected := []*Command{}
@@ -39,31 +21,70 @@ func TestInMemoryStorage_StartListening(t *testing.T) {
 	}
 }
 
-func TestInMemoryStorage_StopListening(t *testing.T) {
+func TestInMemoryStorage_SingleCommand(t *testing.T) {
 	buffer := make(chan []byte)
 	defer close(buffer)
 
 	store := NewInMemory(buffer)
-	time.Sleep(100)
-	buffer <- []byte("first line\n")
-	time.Sleep(100)
 
-	store.StartListening(0)
-	time.Sleep(100)
-	buffer <- []byte("second line\n")
-	time.Sleep(100)
+	startTime := 1000
+	output := "output"
+	command := "ls"
+	returnCode := 1
+	endTime := 2000
 
-	store.StopListening("ls", 0, 1)
-	time.Sleep(100)
-	buffer <- []byte("third line\n")
-	time.Sleep(100)
+	store.StartListening(startTime)
+	time.Sleep(10 * time.Millisecond)
+
+	buffer <- []byte(output)
+	time.Sleep(10 * time.Millisecond)
+
+	store.StopListening(command, returnCode, endTime)
 
 	result := store.List(10)
 	expected := []*Command{
-		{"ls", "second line\n", 0, 0, 1},
+		{command, output, returnCode, startTime, endTime},
 	}
 
 	if !reflect.DeepEqual(result, expected) {
 		t.Fatalf("Expected %s but got %s", expected, result)
+	}
+}
+
+func TestInMemoryStorage_MoreThenLimit(t *testing.T) {
+	buffer := make(chan []byte)
+	defer close(buffer)
+
+	store := NewInMemory(buffer)
+
+	expected := []*Command{}
+
+	for i := 0; i <= inMemoryStorageSize + 10; i++ {
+		startTime := 1000 + i
+		output := fmt.Sprintf("output %d", i)
+		command := fmt.Sprintf("ls %d", i)
+		returnCode := i
+		endTime := 2000 + i
+
+		store.StartListening(startTime)
+		time.Sleep(10 * time.Millisecond)
+
+		buffer <- []byte(output)
+		time.Sleep(10 * time.Millisecond)
+
+		store.StopListening(command, returnCode, endTime)
+
+		result := store.List(10)
+		expected = append([]*Command{
+			{command, output, returnCode, startTime, endTime},
+		}, expected...)
+
+		if i >= 10 {
+			expected = expected[:10]
+		}
+
+		if !reflect.DeepEqual(result, expected) {
+			t.Fatalf("Expected %s but got %s", expected, result)
+		}
 	}
 }

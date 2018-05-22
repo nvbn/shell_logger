@@ -18,8 +18,7 @@ func NewInMemory(buffer <-chan []byte) *inMemoryStorage {
 }
 
 func (s *inMemoryStorage) handleBuffer(buffer <-chan []byte) {
-	for {
-		line := <-buffer
+	for line := range buffer{
 		s.mutex.Lock()
 		if s.currentCommand != nil {
 			s.currentCommand.Output += string(line)
