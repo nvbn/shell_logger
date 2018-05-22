@@ -1,8 +1,8 @@
 package shell
 
 import (
-	"testing"
 	"os"
+	"testing"
 )
 
 func TestZsh_SetupWrapper(t *testing.T) {

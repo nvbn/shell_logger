@@ -1,9 +1,9 @@
 package storage
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
-	"fmt"
 	"time"
 )
 
@@ -59,7 +59,7 @@ func TestInMemoryStorage_MoreThenLimit(t *testing.T) {
 
 	expected := []*Command{}
 
-	for i := 0; i <= inMemoryStorageSize + 10; i++ {
+	for i := 0; i <= inMemoryStorageSize+10; i++ {
 		startTime := 1000 + i
 		output := fmt.Sprintf("output %d", i)
 		command := fmt.Sprintf("ls %d", i)
