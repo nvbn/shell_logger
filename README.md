@@ -6,7 +6,7 @@ Dead simple logger of shell commands with output and exit codes.
 
 ## Installation
 
-Only 64 bit Linux and osx with zsh are supported at the moment:
+Only 64 bit Linux and osx with bash or zsh are supported at the moment:
 
 ```bash
 sh -c "$(curl -sL https://raw.githubusercontent.com/nvbn/shell_logger/master/install.sh)"
