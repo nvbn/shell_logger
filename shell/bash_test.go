@@ -12,7 +12,7 @@ func TestBash_SetupWrapper(t *testing.T) {
 	expected := "shell_logger --wrap"
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -37,7 +37,7 @@ preexec_functions+=(shell_logger_preexec)
 precmd_functions+=(shell_logger_precmd)
 `
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -49,7 +49,7 @@ func TestBash_InWrapper(t *testing.T) {
 	expected := true
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -61,7 +61,7 @@ func TestBash_InWrapper_Not(t *testing.T) {
 	expected := false
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -73,7 +73,7 @@ func TestBash_GetSocketPath(t *testing.T) {
 	expected := "/tmp/socket"
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -85,7 +85,7 @@ func TestBash_SetSocketPath(t *testing.T) {
 	expected := "/tmp/new-socket"
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -95,13 +95,13 @@ func TestBash_GetStartTime(t *testing.T) {
 
 	result, err := b.GetStartTime()
 	if err != nil {
-		t.Fatalf("Unexpected error %s", err)
+		t.Fatalf("Unexpected error %#v", err)
 	}
 
 	expected := 123
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -112,7 +112,7 @@ func TestBash_GetStartTime_NotANumber(t *testing.T) {
 	result, err := b.GetStartTime()
 
 	if err == nil {
-		t.Fatalf("Expected error but got %s", result)
+		t.Fatalf("Expected error but got %#v", result)
 	}
 }
 
@@ -124,7 +124,7 @@ func TestBash_GetCommand(t *testing.T) {
 	expected := "ls ~/.local/bin"
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -134,13 +134,13 @@ func TestBash_GetReturnCode(t *testing.T) {
 
 	result, err := b.GetReturnCode()
 	if err != nil {
-		t.Fatalf("Unexpected error %s", err)
+		t.Fatalf("Unexpected error %#v", err)
 	}
 
 	expected := -1
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -151,7 +151,7 @@ func TestBash_GetReturnCode_NotANumber(t *testing.T) {
 	result, err := b.GetReturnCode()
 
 	if err == nil {
-		t.Fatalf("Expected error but got %s", result)
+		t.Fatalf("Expected error but got %#v", result)
 	}
 }
 
@@ -161,13 +161,13 @@ func TestBash_GetEndTime(t *testing.T) {
 
 	result, err := b.GetEndTime()
 	if err != nil {
-		t.Fatalf("Unexpected error %s", err)
+		t.Fatalf("Unexpected error %#v", err)
 	}
 
 	expected := 123
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -178,6 +178,6 @@ func TestBash_GetEndTime_NotANumber(t *testing.T) {
 	result, err := b.GetEndTime()
 
 	if err == nil {
-		t.Fatalf("Expected error but got %s", result)
+		t.Fatalf("Expected error but got %#v", result)
 	}
 }

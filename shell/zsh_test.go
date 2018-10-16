@@ -12,7 +12,7 @@ func TestZsh_SetupWrapper(t *testing.T) {
 	expected := "shell_logger --wrap"
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -38,7 +38,7 @@ add-zsh-hook -Uz preexec shell_logger_preexec;
 add-zsh-hook -Uz precmd shell_logger_precmd;
 `
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -50,7 +50,7 @@ func TestZsh_InWrapper(t *testing.T) {
 	expected := true
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -62,7 +62,7 @@ func TestZsh_InWrapper_Not(t *testing.T) {
 	expected := false
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -74,7 +74,7 @@ func TestZsh_GetSocketPath(t *testing.T) {
 	expected := "/tmp/socket"
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -86,7 +86,7 @@ func TestZsh_SetSocketPath(t *testing.T) {
 	expected := "/tmp/new-socket"
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -96,13 +96,13 @@ func TestZsh_GetStartTime(t *testing.T) {
 
 	result, err := z.GetStartTime()
 	if err != nil {
-		t.Fatalf("Unexpected error %s", err)
+		t.Fatalf("Unexpected error %#v", err)
 	}
 
 	expected := 123
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -113,7 +113,7 @@ func TestZsh_GetStartTime_NotANumber(t *testing.T) {
 	result, err := z.GetStartTime()
 
 	if err == nil {
-		t.Fatalf("Expected error but got %s", result)
+		t.Fatalf("Expected error but got %#v", result)
 	}
 }
 
@@ -125,7 +125,7 @@ func TestZsh_GetCommand(t *testing.T) {
 	expected := "ls /"
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -135,13 +135,13 @@ func TestZsh_GetReturnCode(t *testing.T) {
 
 	result, err := z.GetReturnCode()
 	if err != nil {
-		t.Fatalf("Unexpected error %s", err)
+		t.Fatalf("Unexpected error %#v", err)
 	}
 
 	expected := -1
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -152,7 +152,7 @@ func TestZsh_GetReturnCode_NotANumber(t *testing.T) {
 	result, err := z.GetReturnCode()
 
 	if err == nil {
-		t.Fatalf("Expected error but got %s", result)
+		t.Fatalf("Expected error but got %#v", result)
 	}
 }
 
@@ -162,13 +162,13 @@ func TestZsh_GetEndTime(t *testing.T) {
 
 	result, err := z.GetEndTime()
 	if err != nil {
-		t.Fatalf("Unexpected error %s", err)
+		t.Fatalf("Unexpected error %#v", err)
 	}
 
 	expected := 123
 
 	if result != expected {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -179,6 +179,6 @@ func TestZsh_GetEndTime_NotANumber(t *testing.T) {
 	result, err := z.GetEndTime()
 
 	if err == nil {
-		t.Fatalf("Expected error but got %s", result)
+		t.Fatalf("Expected error but got %#v", result)
 	}
 }

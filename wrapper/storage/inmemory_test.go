@@ -17,7 +17,7 @@ func TestInMemoryStorage_Empty(t *testing.T) {
 	expected := []*Command{}
 
 	if !reflect.DeepEqual(result, expected) {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -47,7 +47,7 @@ func TestInMemoryStorage_SingleCommand(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(result, expected) {
-		t.Fatalf("Expected %s but got %s", expected, result)
+		t.Fatalf("Expected %#v but got %#v", expected, result)
 	}
 }
 
@@ -84,7 +84,7 @@ func TestInMemoryStorage_MoreThenLimit(t *testing.T) {
 		}
 
 		if !reflect.DeepEqual(result, expected) {
-			t.Fatalf("Expected %s but got %s", expected, result)
+			t.Fatalf("Expected %#v but got %#v", expected, result)
 		}
 	}
 }
