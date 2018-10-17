@@ -6,6 +6,7 @@ image = ('shell_logger/zsh_install',
 
 
 setup = '''
+cp -a /src/functional_tests/common /root/
 cp /src/functional_tests/test_install/.zshrc /root/
 '''
 

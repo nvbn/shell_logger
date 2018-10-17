@@ -1,6 +1,1 @@
-export SHELL=/usr/bin/zsh
-export HISTFILE=~/.zsh_history
-echo > $HISTFILE
-export SAVEHIST=100
-export HISTSIZE=100
-setopt INC_APPEND_HISTORY
+source ~/common/zsh_env.sh
