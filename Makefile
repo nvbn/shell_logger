@@ -21,5 +21,11 @@ functional_test:
 	GOOS=linux GOARCH=amd64 go build -o functional_tests/shell_logger shell_logger.go; \
 	py.test functional_tests -vvvv --capture=sys
 
+resources_usage_test:
+	dep ensure;
+	pip3 install --user -r functional_tests/requirements.txt; \
+	GOOS=linux GOARCH=amd64 go build -o functional_tests/shell_logger shell_logger.go; \
+	py.test functional_tests/test_resources_usage --enable-resources-usage=100 -vvvv -s 2>/dev/null
+
 fmt:
 	go fmt ./...
