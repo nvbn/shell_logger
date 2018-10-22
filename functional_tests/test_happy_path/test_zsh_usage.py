@@ -12,7 +12,7 @@ setup = '''
 cp /src/functional_tests/shell_logger /usr/bin/
 chmod +x /usr/bin/shell_logger
 cp -a /src/functional_tests/common /root/
-cp /src/functional_tests/test_usage/.zshrc /root/
+cp /src/functional_tests/test_happy_path/.zshrc /root/
 '''
 
 
